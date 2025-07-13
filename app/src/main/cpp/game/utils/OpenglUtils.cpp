@@ -13,6 +13,25 @@
 #include <sstream>
 #include <string>
 
+std::string OpenglUtils::loadShaderFromFile(const char *filePath) {
+    auto assetManager = AssetManager::assetManager;
+    if (!assetManager) {
+        __android_log_print(ANDROID_LOG_ERROR, "ShaderLoader", "AssetManager is null!");
+        return "";
+    }
+
+    AAsset* file = AAssetManager_open(assetManager, filePath, AASSET_MODE_BUFFER);
+    if (!file) {
+        __android_log_print(ANDROID_LOG_ERROR, "ShaderLoader", "Failed to open: %s", filePath);
+        return "";
+    }
+
+    size_t size = AAsset_getLength(file);
+    std::string content(size, '\0');
+    AAsset_read(file, content.data(), size);
+    AAsset_close(file);
+    return content;
+}
 
 bool OpenglUtils::createShader(int type, const char *code, unsigned int &shader) {
     shader = glCreateShader(type);
@@ -45,22 +64,20 @@ bool OpenglUtils::createProgram(unsigned int vertexShader, unsigned int fragment
     return true;
 }
 
-std::string OpenglUtils::loadShaderFromFile(const char *filePath) {
-    auto assetManager = AssetManager::assetManager;
-    if (!assetManager) {
-        __android_log_print(ANDROID_LOG_ERROR, "ShaderLoader", "AssetManager is null!");
-        return "";
-    }
 
-    AAsset* file = AAssetManager_open(assetManager, filePath, AASSET_MODE_BUFFER);
-    if (!file) {
-        __android_log_print(ANDROID_LOG_ERROR, "ShaderLoader", "Failed to open: %s", filePath);
-        return "";
+bool OpenglUtils::createProgram(unsigned int &program, const char *vertexPath, const char *fragmentPath) {
+    std::string vertexShaderSource = OpenglUtils::loadShaderFromFile(vertexPath);
+    std::string fragmentShaderSource =  OpenglUtils::loadShaderFromFile(fragmentPath);
+    unsigned int vertexShader, fragmentShader;
+    if(!OpenglUtils::createShader(GL_VERTEX_SHADER, vertexShaderSource.c_str(), vertexShader)) {
+        return false;
     }
-
-    size_t size = AAsset_getLength(file);
-    std::string content(size, '\0');
-    AAsset_read(file, content.data(), size);
-    AAsset_close(file);
-    return content;
+    if(!OpenglUtils::createShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str(), fragmentShader)){
+        return false;
+    }
+    auto success = OpenglUtils::createProgram(vertexShader, fragmentShader, program);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+    __android_log_print(ANDROID_LOG_INFO, "GameTag", "Program created successfully: %d", success);
+    return success;
 }

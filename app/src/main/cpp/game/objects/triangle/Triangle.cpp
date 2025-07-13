@@ -7,32 +7,29 @@
 #include <GLES3/gl3.h>
 #include <array>
 #include <android/log.h>
+#include "../GLObject.h"
+#include "../uniform/Uniforms.h"
 
-class Triangle : public GameObject {
+class Triangle : public GameObject, private GLObject {
 
 public:
     void init() override {
-        if (!loadProgram()) { return; }
+        if (!OpenglUtils::createProgram(program, vertexPath, fragmentPath)) { return; }
         initUniforms();
-        initVao();
+        initData();
     }
 
     void onDraw() override {
         glUseProgram(program);
         glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, boxIndices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
         glUseProgram(0);
     }
 
 private:
 
-    unsigned int vao = 0;
-    unsigned int vbo = 0;
-    unsigned int ebo = 0;
-
-    unsigned int program = 0;
-
+    CommonUniforms uniforms = {};
     // 4 vertices (x, y)
     const std::array<float, 8> vertexData = {
             -0.5f, -0.5f,  // bottom left
@@ -40,64 +37,41 @@ private:
             0.5f,  0.5f,  // top right
             -0.5f,  0.5f   // top left
     };
-
-    int stride = 2 * sizeof(float); // 2 floats per vertex (x, y)
-    int numberOfFloatsPerVertex = 2;
+    unsigned int vertexDataSize = vertexData.size() * sizeof(float);
 
     // 6 indices (2 triangles)
-    const std::array<unsigned int, 6> boxIndices = {
+    const std::array<unsigned int, 6> indices = {
             0, 1, 2,
             2, 3, 0
     };
+    unsigned int indicesSize = indices.size() * sizeof(unsigned int);
 
-    std::string vertexShaderSource;
-    std::string fragmentShaderSource;
+    unsigned int numberOfFloatsPerVertex = 2; // x, y
 
-    int u_ratio;
+    const char* vertexPath = "triangle_v.vert";
+    const char* fragmentPath = "triangle_f.frag";
 
-
-    void initShaderSources() {
-        vertexShaderSource = OpenglUtils::loadShaderFromFile("triangle_v.vert");
-        fragmentShaderSource = OpenglUtils::loadShaderFromFile("triangle_f.frag");
-    }
-
-    bool loadProgram() {
-        initShaderSources();
-        unsigned int vertexShader, fragmentShader;
-        if(!OpenglUtils::createShader(GL_VERTEX_SHADER, vertexShaderSource.c_str(), vertexShader)) {
-            return false;
-        }
-        if(!OpenglUtils::createShader(GL_FRAGMENT_SHADER, fragmentShaderSource.c_str(), fragmentShader)){
-            return false;
-        }
-        auto success = OpenglUtils::createProgram(vertexShader, fragmentShader, program);
-        glDeleteShader(vertexShader);
-        glDeleteShader(fragmentShader);
-        __android_log_print(ANDROID_LOG_INFO, "GameTag", "Program created successfully: %d", success);
-        return success;
-    }
-
-    void initVao() {
+    void initData() {
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
 
         glGenBuffers(1, &vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, vertexData.size() * sizeof(float), vertexData.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData.data(), GL_STATIC_DRAW);
 
         glVertexAttribPointer(0, numberOfFloatsPerVertex, GL_FLOAT, GL_FALSE, stride, (void*)0);
         glEnableVertexAttribArray(0);
 
         glGenBuffers(1, &ebo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, boxIndices.size() * sizeof(unsigned int), boxIndices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices.data(), GL_STATIC_DRAW);
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     void initUniforms() {
-        u_ratio = glGetUniformLocation(program, "u_ratio");
+        uniforms.u_ratio = glGetUniformLocation(program, "u_ratio");
         setRatio(1.0f);
     }
 
@@ -108,7 +82,7 @@ private:
 
     void setRatio(float ratio) {
         glUseProgram(program);
-        glUniform1f(u_ratio, ratio);
+        glUniform1f(uniforms.u_ratio, ratio);
         glUseProgram(0);
     }
 

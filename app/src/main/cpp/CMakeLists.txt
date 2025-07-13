@@ -26,10 +26,12 @@ project("workingwithc")
 # used in the AndroidManifest.xml file.
 
 add_library(${CMAKE_PROJECT_NAME} SHARED
+
         asset/AssetManager.cpp
         ResourcesBridge.cpp
         game/GameRendererBridge.cpp
         game/GameRenderer.cpp
+        game/objects/GLObject.cpp
         game/objects/triangle/Triangle.cpp
         game/utils/OpenGLUtils.cpp
 )
