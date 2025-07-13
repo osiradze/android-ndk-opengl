@@ -6,9 +6,16 @@ import android.util.AttributeSet
 
 class GameView(context: Context, attrs: AttributeSet) : GLSurfaceView(context) {
 
+    private val gameRenderer: GameRenderer = GameRenderer()
+
     init {
         setEGLContextClientVersion(3)
-        setRenderer(GameRenderer()) // Set the renderer for this view
+        setRenderer(gameRenderer) // Set the renderer for this view
         renderMode = RENDERMODE_WHEN_DIRTY // Render continuously
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+
     }
 }

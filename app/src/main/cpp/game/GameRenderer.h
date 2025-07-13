@@ -15,4 +15,5 @@ class GameRenderer {
 
         const void onSurfaceChanged(int width, int height);
 
+        const void onDestroy();
 };

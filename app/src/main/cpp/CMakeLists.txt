@@ -27,11 +27,10 @@ project("workingwithc")
 
 add_library(${CMAKE_PROJECT_NAME} SHARED
 
-        asset/AssetManager.cpp
+        assets/AssetManager.cpp
         ResourcesBridge.cpp
         game/GameRendererBridge.cpp
         game/GameRenderer.cpp
-        game/objects/GLObject.cpp
         game/objects/triangle/Triangle.cpp
         game/utils/OpenGLUtils.cpp
 )

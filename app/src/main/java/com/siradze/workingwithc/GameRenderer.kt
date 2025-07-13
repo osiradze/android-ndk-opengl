@@ -18,9 +18,15 @@ class GameRenderer: GLSurfaceView.Renderer {
         onSurfaceChangedBridge(width, height)
     }
 
+    fun onDestroy() {
+        onDestroyBridge()
+    }
+
     private external fun onSurfaceCreatedBridge()
 
     private external fun onDrawFrameBridge()
 
     private external fun onSurfaceChangedBridge(width: Int, height: Int)
+
+    private external fun onDestroyBridge()
 }

@@ -14,3 +14,7 @@ const void GameRenderer::onDrawFrame() {
 const void GameRenderer::onSurfaceChanged(int width, int height) {
     triangle -> resize(width, height);
 }
+
+const void GameRenderer::onDestroy() {
+    triangle -> destroy();
+}

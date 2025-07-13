@@ -2,10 +2,11 @@
 // Created by OSiradze on 13.07.25.
 //
 
-
+#define STB_IMAGE_IMPLEMENTATION
 #include <cstdio>
 #include "OpenglUtils.h"
-#include "../../asset/AssetManager.h"
+#include "../../assets/AssetManager.h"
+#include "../../image/stb_image.h"
 #include <GLES3/gl3.h>
 #include <android/log.h>
 
@@ -22,7 +23,7 @@ std::string OpenglUtils::loadShaderFromFile(const char *filePath) {
 
     AAsset* file = AAssetManager_open(assetManager, filePath, AASSET_MODE_BUFFER);
     if (!file) {
-        __android_log_print(ANDROID_LOG_ERROR, "ShaderLoader", "Failed to open: %s", filePath);
+        __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "Failed to open: %s", filePath);
         return "";
     }
 
@@ -42,7 +43,7 @@ bool OpenglUtils::createShader(int type, const char *code, unsigned int &shader)
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(shader, 512, nullptr, infoLog);
-        __android_log_print(ANDROID_LOG_ERROR, "GameTag", "%s", infoLog);
+        __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "%s", infoLog);
         return false;
     }
     return true;
@@ -58,7 +59,7 @@ bool OpenglUtils::createProgram(unsigned int vertexShader, unsigned int fragment
     glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(program, 512, nullptr, infoLog);
-        printf("ERROR::PROGRAM::LINKING_FAILED\n%s\n", infoLog);
+        __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "%s", infoLog);
         return false;
     }
     return true;
@@ -68,6 +69,10 @@ bool OpenglUtils::createProgram(unsigned int vertexShader, unsigned int fragment
 bool OpenglUtils::createProgram(unsigned int &program, const char *vertexPath, const char *fragmentPath) {
     std::string vertexShaderSource = OpenglUtils::loadShaderFromFile(vertexPath);
     std::string fragmentShaderSource =  OpenglUtils::loadShaderFromFile(fragmentPath);
+    if(vertexShaderSource.empty() || fragmentShaderSource.empty()) {
+        __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "Failed to load shader source from files: %s, %s", vertexPath, fragmentPath);
+        return false;
+    }
     unsigned int vertexShader, fragmentShader;
     if(!OpenglUtils::createShader(GL_VERTEX_SHADER, vertexShaderSource.c_str(), vertexShader)) {
         return false;
@@ -78,6 +83,34 @@ bool OpenglUtils::createProgram(unsigned int &program, const char *vertexPath, c
     auto success = OpenglUtils::createProgram(vertexShader, fragmentShader, program);
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-    __android_log_print(ANDROID_LOG_INFO, "GameTag", "Program created successfully: %d", success);
+    __android_log_print(ANDROID_LOG_INFO, "OpenglUtils", "Program created successfully: %d", success);
     return success;
+}
+
+unsigned char* OpenglUtils::loadImageFromAssets(const char* assetPath, int& width, int& height, int& channels) {
+    auto assetManager = AssetManager::assetManager;
+    if (!assetManager) {
+        __android_log_print(ANDROID_LOG_ERROR, "ImageLoader", "AssetManager not set");
+        return nullptr;
+    }
+
+    AAsset* asset = AAssetManager_open(assetManager, assetPath, AASSET_MODE_BUFFER);
+    if (!asset) {
+        __android_log_print(ANDROID_LOG_ERROR, "ImageLoader", "Failed to open asset: %s", assetPath);
+        return nullptr;
+    }
+
+    off_t length = AAsset_getLength(asset);
+    unsigned char* buffer = new unsigned char[length];
+    AAsset_read(asset, buffer, length);
+    AAsset_close(asset);
+
+    unsigned char* image = stbi_load_from_memory(buffer, length, &width, &height, &channels, 4);
+    delete[] buffer;
+
+    if (!image) {
+        __android_log_print(ANDROID_LOG_ERROR, "ImageLoader", "stb_image failed: %s", stbi_failure_reason());
+    }
+
+    return image;
 }

@@ -1,5 +1,5 @@
 #include <jni.h>
-#include "asset/AssetManager.h"
+#include "assets/AssetManager.h"
 
 //
 // Created by OSiradze on 13.07.25.
