@@ -3,18 +3,36 @@
 //
 #include "GameRenderer.h"
 
-const void GameRenderer::onSurfaceCreated() {
-    triangle -> init();
+void GameRenderer::onSurfaceCreated() {
+    gameObjects[0] = new Triangle();
+    for (GameObject* obj : gameObjects) {
+        if (obj) {
+            obj->init();
+        }
+    }
 }
 
-const void GameRenderer::onDrawFrame() {
-    triangle -> onDraw();
+void GameRenderer::onDrawFrame() {
+    for (GameObject* obj : gameObjects) {
+        if (obj) {
+            obj->onDraw();
+        }
+    }
 }
 
-const void GameRenderer::onSurfaceChanged(int width, int height) {
-    triangle -> resize(width, height);
+void GameRenderer::onSurfaceChanged(int width, int height) {
+    for (GameObject* obj : gameObjects) {
+        if (obj) {
+            obj->resize(width, height);
+        }
+    }
 }
 
-const void GameRenderer::onDestroy() {
-    triangle -> destroy();
+void GameRenderer::onDestroy() {
+    for (GameObject* obj : gameObjects) {
+        if (obj) {
+            obj->destroy();
+            delete obj;
+        }
+    }
 }

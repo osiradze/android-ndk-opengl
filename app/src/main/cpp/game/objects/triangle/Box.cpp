@@ -22,8 +22,11 @@ public:
     }
 
     void onDraw() override {
+        time++;
         glUseProgram(program);
         glBindVertexArray(vao);
+        bindDrawUniforms();
+        activateTextures();
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
         glBindVertexArray(0);
         glUseProgram(0);
@@ -34,11 +37,12 @@ public:
         glDeleteBuffers(1, &vbo);
         glDeleteBuffers(1, &ebo);
         glDeleteProgram(program);
-        glDeleteTextures(1, &texture);
+        glDeleteTextures(2, texture);
     }
 
 private:
 
+    int time = 0;
     CommonUniforms uniforms = {};
     unsigned int numberOfFloatsPerVertex = 8;
     unsigned int stride = numberOfFloatsPerVertex * sizeof(float);
@@ -62,7 +66,9 @@ private:
     const char* fragmentPath = "shaders/triangle_f.frag";
 
 
-    unsigned int texture = 0;
+    static const unsigned int numberOfTextures = 2;
+    unsigned int texture[numberOfTextures];
+    int textureLocations[numberOfTextures];
 
     void initData() {
         glGenVertexArrays(1, &vao);
@@ -90,27 +96,26 @@ private:
     }
 
     void initTexture() {
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glGenTextures(numberOfTextures, texture);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture[0]);
+        textureLocations[0] = glGetUniformLocation(program, "u_texture_1");
 
-        int w, h, ch;
-        unsigned char* data = OpenglUtils::loadImageFromAssets("textures/texture.png", w, h, ch);
+        OpenglUtils::loadTexture("textures/texture1.png");
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture[1]);
+        OpenglUtils::loadTexture("textures/texture2.png");
+        textureLocations[1] = glGetUniformLocation(program, "u_texture_2");
 
-        if (data) {
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-        }else {
-            __android_log_print(ANDROID_LOG_ERROR, "Triangle", "Failed to load texture");
-        }
-        stbi_image_free(data);
+        glUseProgram(program);
+        glUniform1i(textureLocations[0], 0);                // assign sampler to texture unit 0
+        glUniform1i(textureLocations[1], 1);                // assign sampler to texture unit 1
+        glUseProgram(0);
     }
 
     void initUniforms() {
         uniforms.u_ratio = glGetUniformLocation(program, "u_ratio");
+        uniforms.u_time = glGetUniformLocation(program, "u_time");
         setRatio(1.0f);
     }
 
@@ -123,6 +128,16 @@ private:
         glUseProgram(program);
         glUniform1f(uniforms.u_ratio, ratio);
         glUseProgram(0);
+    }
+
+    void activateTextures() {
+        for (int i = 0; i < numberOfTextures; ++i) {
+            glActiveTexture(GL_TEXTURE0 + i);
+            glBindTexture(GL_TEXTURE_2D, texture[i]);
+        }
+    }
+    void bindDrawUniforms() const {
+        glUniform1i(uniforms.u_time, time);
     }
 
 };

@@ -101,10 +101,11 @@ unsigned char* OpenglUtils::loadImageFromAssets(const char* assetPath, int& widt
     }
 
     off_t length = AAsset_getLength(asset);
-    unsigned char* buffer = new unsigned char[length];
+    auto* buffer = new unsigned char[length];
     AAsset_read(asset, buffer, length);
     AAsset_close(asset);
 
+    stbi_set_flip_vertically_on_load(true);
     unsigned char* image = stbi_load_from_memory(buffer, length, &width, &height, &channels, 4);
     delete[] buffer;
 
@@ -113,4 +114,22 @@ unsigned char* OpenglUtils::loadImageFromAssets(const char* assetPath, int& widt
     }
 
     return image;
+}
+
+void OpenglUtils::loadTexture(const char *assetPath) {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    int w, h, ch;
+    unsigned char* data = OpenglUtils::loadImageFromAssets(assetPath, w, h, ch);
+
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }else {
+        __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "Failed to load texture");
+    }
+    stbi_image_free(data);
 }

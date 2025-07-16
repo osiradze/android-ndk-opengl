@@ -9,7 +9,7 @@ out vec3 v_color;
 out vec2 v_texture_coord;
 
 void main() {
-    gl_Position = vec4(a_pos.x, a_pos.y * u_ratio, a_pos.z, 1.0);
+    gl_Position = vec4(a_pos.x / u_ratio, a_pos.y, a_pos.z, 1.0) * 2.0;
     v_texture_coord = a_texture_coord;
     v_color = a_color;
 }

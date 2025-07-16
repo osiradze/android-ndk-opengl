@@ -31,7 +31,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         ResourcesBridge.cpp
         game/GameRendererBridge.cpp
         game/GameRenderer.cpp
-        game/objects/triangle/Triangle.cpp
+        game/objects/triangle/Box.cpp
         game/utils/OpenGLUtils.cpp
 )
 

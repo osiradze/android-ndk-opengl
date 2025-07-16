@@ -12,4 +12,5 @@ public:
     static bool createProgram(unsigned int vertexShader, unsigned int fragmentShader, unsigned int &program);
     static bool createProgram(unsigned int &program, const char *vertexPath, const char *fragmentPath);
     static unsigned char* loadImageFromAssets(const char* assetPath, int& width, int& height, int& channels);
+    static void loadTexture(const char* assetPath);
 };

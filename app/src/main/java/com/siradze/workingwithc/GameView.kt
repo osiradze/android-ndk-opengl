@@ -11,11 +11,11 @@ class GameView(context: Context, attrs: AttributeSet) : GLSurfaceView(context) {
     init {
         setEGLContextClientVersion(3)
         setRenderer(gameRenderer) // Set the renderer for this view
-        renderMode = RENDERMODE_WHEN_DIRTY // Render continuously
+        renderMode = RENDERMODE_CONTINUOUSLY // Render continuously
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-
+        gameRenderer.onDestroy()
     }
 }

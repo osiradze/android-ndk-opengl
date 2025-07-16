@@ -3,17 +3,18 @@
 //
 
 #include "objects/GameObject.h"
-#include "objects/triangle/Triangle.cpp"
+#include "objects/triangle/Box.cpp"
+#include <array>
 
 class GameRenderer {
     public:
-        GameObject* triangle = new Triangle();
+        std::array<GameObject*, 2> gameObjects;
 
-        const void onSurfaceCreated();
+        void onSurfaceCreated();
 
-        const void onDrawFrame();
+        void onDrawFrame();
 
-        const void onSurfaceChanged(int width, int height);
+        void onSurfaceChanged(int width, int height);
 
-        const void onDestroy();
+        void onDestroy();
 };
