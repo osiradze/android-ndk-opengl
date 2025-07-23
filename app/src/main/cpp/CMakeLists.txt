@@ -31,8 +31,9 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         ResourcesBridge.cpp
         game/GameRendererBridge.cpp
         game/GameRenderer.cpp
-        game/objects/triangle/Box.cpp
+        game/objects/box/Box.cpp
         game/utils/OpenGLUtils.cpp
+        game/camera/Camera.cpp
 )
 
 find_library(gles-lib GLESv3)
@@ -44,4 +45,15 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         android
         log
         ${gles-lib}
+        glm
 )
+
+include(FetchContent)
+
+FetchContent_Declare(
+        glm
+        GIT_REPOSITORY https://github.com/g-truc/glm.git
+        GIT_TAG        1.0.1
+)
+
+FetchContent_MakeAvailable(glm)

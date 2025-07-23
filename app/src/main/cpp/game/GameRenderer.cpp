@@ -2,9 +2,12 @@
 // Created by OSiradze on 13.07.25.
 //
 #include "GameRenderer.h"
+#include "objects/box/Box.cpp"
+#include <glm/glm.hpp>
 
 void GameRenderer::onSurfaceCreated() {
-    gameObjects[0] = new Triangle();
+    Camera* cameraPtr = &camera;
+    gameObjects[0] = new Box(cameraPtr);
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->init();
@@ -21,6 +24,7 @@ void GameRenderer::onDrawFrame() {
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
+    camera.setRatio(static_cast<float>(width) / static_cast<float>(height));
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->resize(width, height);

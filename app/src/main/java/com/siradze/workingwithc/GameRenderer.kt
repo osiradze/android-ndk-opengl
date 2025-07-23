@@ -1,5 +1,11 @@
 package com.siradze.workingwithc
 
+import android.opengl.GLES20.GL_COLOR_BUFFER_BIT
+import android.opengl.GLES20.GL_DEPTH_BUFFER_BIT
+import android.opengl.GLES20.GL_DEPTH_TEST
+import android.opengl.GLES20.glClear
+import android.opengl.GLES20.glClearColor
+import android.opengl.GLES20.glEnable
 import android.opengl.GLSurfaceView
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -11,6 +17,11 @@ class GameRenderer: GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(gl: GL10?) {
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set clear color: black, opaque
+        glClear(GL_COLOR_BUFFER_BIT) // Clear the color buffer
+        glClear(GL_DEPTH_BUFFER_BIT) // Clear the color buffer
+
+        glEnable(GL_DEPTH_TEST)
         onDrawFrameBridge()
     }
 

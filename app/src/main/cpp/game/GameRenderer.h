@@ -3,11 +3,12 @@
 //
 
 #include "objects/GameObject.h"
-#include "objects/triangle/Box.cpp"
+#include "camera/Camera.h"
 #include <array>
 
 class GameRenderer {
     public:
+        Camera camera = Camera::createDefaultCamera();
         std::array<GameObject*, 2> gameObjects;
 
         void onSurfaceCreated();
