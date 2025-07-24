@@ -7,7 +7,7 @@
 
 void GameRenderer::onSurfaceCreated() {
     Camera* cameraPtr = &camera;
-    gameObjects[0] = new Box(cameraPtr,mat4(1.0f));
+    gameObjects[0] = new Box(cameraPtr, glm::mat4(1.0f));
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->init();
@@ -16,6 +16,7 @@ void GameRenderer::onSurfaceCreated() {
 }
 
 void GameRenderer::onDrawFrame() {
+    camera.rotate(0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->onDraw();

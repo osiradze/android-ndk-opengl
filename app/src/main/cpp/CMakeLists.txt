@@ -33,6 +33,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/GameRenderer.cpp
         game/objects/box/Box.cpp
         game/utils/OpenGLUtils.cpp
+        game/utils/MathUtils.cpp
         game/camera/Camera.cpp
 )
 
