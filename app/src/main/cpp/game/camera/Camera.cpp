@@ -6,17 +6,28 @@
 #include "Camera.h"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
+#include <GLES3/gl3.h>
 
-Camera::Camera(glm::vec3 position, float fov, float ratio, float nearPlane, float farPlane) {
-    this->fov = fov;
-    this->ratio = ratio;
-    this->nearPlane = nearPlane;
-    this->farPlane = farPlane;
-    view = glm::translate(view, position);
-    projection = glm::perspective(glm::radians(fov), ratio, nearPlane, farPlane);
-}
+using namespace glm;
+
+Camera::Camera(vec3 eye, vec3 center, vec3 up, float fov, float ratio, float nearPlane, float farPlane)
+        : eye(eye),
+          center(center),
+          up(up),
+          fov(fov),
+          ratio(ratio),
+          nearPlane(nearPlane),
+          farPlane(farPlane),
+          view(lookAt(eye, center, up)),
+          projection(perspective(radians(fov), ratio, nearPlane, farPlane))
+{}
 
 void Camera::setRatio(float r) {
     this->ratio = r;
-    projection = glm::perspective(glm::radians(fov), ratio, nearPlane, farPlane);
+    projection = perspective(radians(fov), ratio, nearPlane, farPlane);
+}
+
+void Camera::setUniform(unsigned int u_view, unsigned int u_projection) {
+    glUniformMatrix4fv(u_view, 1, GL_FALSE, &view[0][0]);
+    glUniformMatrix4fv(u_projection, 1, GL_FALSE, &projection[0][0]);
 }

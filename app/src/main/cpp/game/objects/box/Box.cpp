@@ -17,60 +17,72 @@ struct BoxData {
 
     unsigned int numberOfFloatsPerVertex = 8;
     unsigned int stride = numberOfFloatsPerVertex * sizeof(float);
-    const std::array<float, 64> vertexData = {
-            // positions          // colors          // tex coords
-            // 0
-            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f,
-            // 1
-            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,
-            // 2
-            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,
-            // 3
-            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   1.0f, 1.0f,
-            // 4
-            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-            // 5
-            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 0.0f,
-            // 6
-            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,
-            // 7
-            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f
+    const std::array<float, 192> vertexData = {
+            // Back face (z = -0.5)
+            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
+            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,  // bottom-right
+            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,  // top-right
+            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,  // top-left
+
+            // Front face (z = 0.5)
+            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   0.0f, 0.0f,  // bottom-left
+            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 0.0f,  // bottom-right
+            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,  // top-right
+            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,  // top-left
+
+            // Left face (x = -0.5)
+            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
+            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   1.0f, 0.0f,  // bottom-right
+            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,  // top-right
+            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,  // top-left
+
+            // Right face (x = 0.5)
+            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
+            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 0.0f,  // bottom-right
+            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,  // top-right
+            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,  // top-left
+
+            // Bottom face (y = -0.5)
+            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
+            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,  // bottom-right
+            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 1.0f,  // top-right
+            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   0.0f, 1.0f,  // top-left
+
+            // Top face (y = 0.5)
+            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
+            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,  // bottom-right
+            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,  // top-right
+            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f   // top-left
     };
-    unsigned int vertexDataSize = vertexData.size() * sizeof(float);
 
     const std::array<unsigned int, 36> indices = {
-            // back face
-            0, 1, 2,
-            2, 3, 0,
-            // front face
-            4, 5, 6,
-            6, 7, 4,
-            // left face
-            0, 4, 7,
-            7, 3, 0,
-            // right face
-            1, 5, 6,
-            6, 2, 1,
-            // bottom face
-            0, 1, 5,
-            5, 4, 0,
-            // top face
-            3, 2, 6,
-            6, 7, 3
+            // Back face
+            0, 1, 2,   2, 3, 0,
+            // Front face
+            4, 5, 6,   6, 7, 4,
+            // Left face
+            8, 9, 10,  10, 11, 8,
+            // Right face
+            12, 13, 14, 14, 15, 12,
+            // Bottom face
+            16, 17, 18, 18, 19, 16,
+            // Top face
+            20, 21, 22, 22, 23, 20
     };
+    unsigned int vertexDataSize = vertexData.size() * sizeof(float);
     unsigned int indicesSize = indices.size() * sizeof(unsigned int);
-
-    BoxData() {
-        model = glm::rotate(model, glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    };
 };
 
 class Box : public GameObject, private GLObject {
 
 public:
 
-    explicit Box(Camera* cameraPtr){
+    explicit Box(
+            Camera* cameraPtr,
+            glm::mat4 model
+    ){
         camera = cameraPtr;
+        data.model = model;
     }
 
     void init() override {
@@ -82,8 +94,6 @@ public:
 
     void onDraw() override {
         time++;
-        data.model = glm::rotate(data.model, glm::radians(0.2f), glm::vec3(0.0f, 1.0f, 0.0f));
-        //data.model = glm::rotate(data.model, glm::radians(0.5f), glm::vec3(0.0f, 1.0f, 0.0f));
 
         glUseProgram(program);
         glBindVertexArray(vao);
@@ -108,8 +118,8 @@ private:
     Camera* camera = nullptr;
     BoxData data;
 
-    const char* vertexPath = "shaders/triangle_v.vert";
-    const char* fragmentPath = "shaders/triangle_f.frag";
+    const char* vertexPath = "shaders/object_v.vert";
+    const char* fragmentPath = "shaders/object_f.frag";
 
 
     static const unsigned int numberOfTextures = 2;
@@ -160,11 +170,7 @@ private:
     }
 
     void initUniforms() {
-        uniforms.u_ratio = glGetUniformLocation(program, "u_ratio");
-        uniforms.u_time = glGetUniformLocation(program, "u_time");
-        uniforms.u_model = glGetUniformLocation(program, "u_model");
-        uniforms.u_view = glGetUniformLocation(program, "u_view");
-        uniforms.u_projection = glGetUniformLocation(program, "u_projection");
+        uniforms.init(program);
         setRatio(1.0f);
     }
 
@@ -188,8 +194,7 @@ private:
     void bindDrawUniforms() const {
         glUniform1i(uniforms.u_time, time);
         glUniformMatrix4fv(uniforms.u_model, 1, GL_FALSE, &data.model[0][0]);
-        glUniformMatrix4fv(uniforms.u_view, 1, GL_FALSE, &camera->view[0][0]);
-        glUniformMatrix4fv(uniforms.u_projection, 1, GL_FALSE, &camera->projection[0][0]);
+        camera->setUniform(uniforms.u_view, uniforms.u_projection);
     }
 
 };

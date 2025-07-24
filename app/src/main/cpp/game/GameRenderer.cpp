@@ -7,7 +7,7 @@
 
 void GameRenderer::onSurfaceCreated() {
     Camera* cameraPtr = &camera;
-    gameObjects[0] = new Box(cameraPtr);
+    gameObjects[0] = new Box(cameraPtr,mat4(1.0f));
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->init();
