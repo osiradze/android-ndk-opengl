@@ -3,7 +3,7 @@
 //
 
 #include "glm/ext/matrix_float4x4.hpp"
-#include "base/Uniforms.h"
+#include "../uniform/Uniforms.h"
 
 class GLObject {
 protected:

@@ -17,7 +17,7 @@ public:
     void setRatio(float ratio);
     void rotate(float angle, glm::vec3 vector);
 
-    void setUniform(unsigned int view, unsigned int projection);
+    void setUniform(unsigned int view, unsigned int projection, unsigned int cameraPosition);
 
     static Camera createDefaultCamera() {
         return {

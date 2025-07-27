@@ -3,10 +3,11 @@
 //
 
 #include <GLES3/gl3.h>
-#include "../GameObject.h"
-#include "../GLObject.h"
+#include "../base/GameObject.h"
+#include "../base/GLObject.h"
 #include "../../utils/OpenglUtils.h"
 #include "../../camera/Camera.h"
+#include "../../light/Light.h"
 #include <array>
 
 #include <glm/mat4x4.hpp> // glm::mat4
@@ -15,44 +16,44 @@
 struct BoxData {
     glm::mat4 model = glm::mat4(1.0f);
 
-    unsigned int numberOfFloatsPerVertex = 8;
+    unsigned int numberOfFloatsPerVertex = 11;
     unsigned int stride = numberOfFloatsPerVertex * sizeof(float);
-    const std::array<float, 192> vertexData = {
-            // Back face (z = -0.5)
-            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
-            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,  // bottom-right
-            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,  // top-right
-            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,  // top-left
+    const std::array<float, 264> vertexData = {
+            // Back face (z = -0.5) - Normal: (0, 0, -1)
+            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   0.0f, 0.0f, -1.0f,  // bottom-left
+            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   0.0f, 0.0f, -1.0f,  // bottom-right
+            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 1.0f,   0.0f, 0.0f, -1.0f,  // top-right
+            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   0.0f, 0.0f, -1.0f,  // top-left
 
-            // Front face (z = 0.5)
-            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   0.0f, 0.0f,  // bottom-left
-            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 0.0f,  // bottom-right
-            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,  // top-right
-            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,  // top-left
+            // Front face (z = 0.5) - Normal: (0, 0, 1)
+            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   0.0f, 0.0f,   0.0f, 0.0f, 1.0f,  // bottom-left
+            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 0.0f,   0.0f, 0.0f, 1.0f,  // bottom-right
+            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,   0.0f, 0.0f, 1.0f,  // top-right
+            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,   0.0f, 0.0f, 1.0f,  // top-left
 
-            // Left face (x = -0.5)
-            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
-            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   1.0f, 0.0f,  // bottom-right
-            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,  // top-right
-            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,  // top-left
+            // Left face (x = -0.5) - Normal: (-1, 0, 0)
+            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   -1.0f, 0.0f, 0.0f,  // bottom-left
+            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   1.0f, 0.0f,   -1.0f, 0.0f, 0.0f,  // bottom-right
+            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,   -1.0f, 0.0f, 0.0f,  // top-right
+            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f,   -1.0f, 0.0f, 0.0f,  // top-left
 
-            // Right face (x = 0.5)
-            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
-            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 0.0f,  // bottom-right
-            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,  // top-right
-            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,  // top-left
+            // Right face (x = 0.5) - Normal: (1, 0, 0)
+            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,   1.0f, 0.0f, 0.0f,  // bottom-left
+            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 0.0f,   1.0f, 0.0f, 0.0f,  // bottom-right
+            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,   1.0f, 0.0f, 0.0f,  // top-right
+            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f,   1.0f, 0.0f, 0.0f,  // top-left
 
-            // Bottom face (y = -0.5)
-            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
-            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,  // bottom-right
-            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 1.0f,  // top-right
-            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   0.0f, 1.0f,  // top-left
+            // Bottom face (y = -0.5) - Normal: (0, -1, 0)
+            -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,   0.0f, -1.0f, 0.0f,  // bottom-left
+            0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   0.0f, -1.0f, 0.0f,  // bottom-right
+            0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 1.0f,   1.0f, 1.0f,   0.0f, -1.0f, 0.0f,  // top-right
+            -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 1.0f,   0.0f, 1.0f,   0.0f, -1.0f, 0.0f,  // top-left
 
-            // Top face (y = 0.5)
-            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f,  // bottom-left
-            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,  // bottom-right
-            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,  // top-right
-            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f   // top-left
+            // Top face (y = 0.5) - Normal: (0, 1, 0)
+            -0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f,   0.0f, 1.0f, 0.0f,  // bottom-left
+            0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,   0.0f, 1.0f, 0.0f,  // bottom-right
+            0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f,   0.0f, 1.0f, 0.0f,  // top-right
+            -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,   0.0f, 1.0f, 0.0f   // top-left
     };
 
     const std::array<unsigned int, 36> indices = {
@@ -79,9 +80,11 @@ public:
 
     explicit Box(
             Camera* cameraPtr,
+            Light* lightPtr,
             glm::mat4 model
     ){
         camera = cameraPtr;
+        light = lightPtr;
         data.model = model;
     }
 
@@ -114,15 +117,16 @@ public:
 
 private:
 
-    int time = 0; // TODO needs export
+    int time = 0;
     Camera* camera = nullptr;
+    Light* light = nullptr;
     BoxData data;
 
     const char* vertexPath = "shaders/object_v.vert";
     const char* fragmentPath = "shaders/object_f.frag";
 
 
-    static const unsigned int numberOfTextures = 2;
+    static const unsigned int numberOfTextures = 3;
     unsigned int texture[numberOfTextures]{};
     int textureLocations[numberOfTextures]{};
 
@@ -143,6 +147,9 @@ private:
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, data.stride, (void*)(6 * sizeof(float)));
         glEnableVertexAttribArray(2);
 
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, data.stride, (void*)(8 * sizeof(float)));
+        glEnableVertexAttribArray(3);
+
         glGenBuffers(1, &ebo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.indicesSize, data.indices.data(), GL_STATIC_DRAW);
@@ -152,20 +159,27 @@ private:
     }
 
     void initTexture() {
+
         glGenTextures(numberOfTextures, texture);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture[0]);
         textureLocations[0] = glGetUniformLocation(program, "u_texture_1");
-
         OpenglUtils::loadTexture("textures/texture1.png");
+
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture[1]);
         OpenglUtils::loadTexture("textures/texture2.png");
         textureLocations[1] = glGetUniformLocation(program, "u_texture_2");
 
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, texture[2]);
+        OpenglUtils::loadTexture("textures/texture3.png");
+        textureLocations[2] = glGetUniformLocation(program, "u_texture_3");
+
         glUseProgram(program);
         glUniform1i(textureLocations[0], 0);                // assign sampler to texture unit 0
         glUniform1i(textureLocations[1], 1);                // assign sampler to texture unit 1
+        glUniform1i(textureLocations[2], 2);                // assign sampler to texture unit 1
         glUseProgram(0);
     }
 
@@ -194,7 +208,9 @@ private:
     void bindDrawUniforms() const {
         glUniform1i(uniforms.u_time, time);
         glUniformMatrix4fv(uniforms.u_model, 1, GL_FALSE, &data.model[0][0]);
-        camera->setUniform(uniforms.u_view, uniforms.u_projection);
+        glUniform1f(uniforms.u_ambient_amount, 0.1);
+        camera->setUniform(uniforms.u_view, uniforms.u_projection, uniforms.u_camera_position);
+        light->setUniforms(uniforms.u_light_position, uniforms.u_light_color, uniforms.u_light_intensity);
     }
 
 };

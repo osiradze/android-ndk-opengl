@@ -17,10 +17,9 @@ class GameRenderer: GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(gl: GL10?) {
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set clear color: black, opaque
-        glClear(GL_COLOR_BUFFER_BIT) // Clear the color buffer
-        glClear(GL_DEPTH_BUFFER_BIT) // Clear the color buffer
-
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
+        glClear(GL_COLOR_BUFFER_BIT)
+        glClear(GL_DEPTH_BUFFER_BIT)
         glEnable(GL_DEPTH_TEST)
         onDrawFrameBridge()
     }
@@ -32,6 +31,8 @@ class GameRenderer: GLSurfaceView.Renderer {
     fun onDestroy() {
         onDestroyBridge()
     }
+
+    external fun onDragBridge(x: Float, y: Float)
 
     private external fun onSurfaceCreatedBridge()
 

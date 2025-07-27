@@ -9,6 +9,13 @@ struct CommonUniforms {
     int u_view = -1;
     int u_projection = -1;
 
+    int u_ambient_amount = -1;
+    int u_light_position = -1;
+    int u_light_color = -1;
+    int u_light_intensity = -1;
+
+    int u_camera_position = -1;
+
 public:
     void init(unsigned int program) {
         u_ratio = glGetUniformLocation(program, "u_ratio");
@@ -16,5 +23,10 @@ public:
         u_model = glGetUniformLocation(program, "u_model");
         u_view = glGetUniformLocation(program, "u_view");
         u_projection = glGetUniformLocation(program, "u_projection");
+        u_ambient_amount = glGetUniformLocation(program, "u_ambient_amount");
+        u_light_position = glGetUniformLocation(program, "u_light_position");
+        u_light_color = glGetUniformLocation(program, "u_light_color");
+        u_light_intensity = glGetUniformLocation(program, "u_light_intensity");
+        u_camera_position = glGetUniformLocation(program, "u_camera_position");
     }
 };

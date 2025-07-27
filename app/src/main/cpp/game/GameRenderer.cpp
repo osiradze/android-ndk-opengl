@@ -3,11 +3,13 @@
 //
 #include "GameRenderer.h"
 #include "objects/box/Box.cpp"
+#include "light/Light.h"
 #include <glm/glm.hpp>
 
 void GameRenderer::onSurfaceCreated() {
     Camera* cameraPtr = &camera;
-    gameObjects[0] = new Box(cameraPtr, glm::mat4(1.0f));
+    Light* lightPtr = &light;
+    gameObjects[0] = new Box(cameraPtr, lightPtr, glm::mat4(1.0f));
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->init();
@@ -16,7 +18,8 @@ void GameRenderer::onSurfaceCreated() {
 }
 
 void GameRenderer::onDrawFrame() {
-    camera.rotate(0.5f, glm::vec3(0.0f, 1.0f, 0.0f));
+    light.rotate(10, glm::vec3(0.0f, 1.0f, 0.0f));
+
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->onDraw();
@@ -40,4 +43,9 @@ void GameRenderer::onDestroy() {
             delete obj;
         }
     }
+}
+
+void GameRenderer::onDrag(float x, float y) {
+    camera.rotate(-0.1f * x, glm::vec3(0.0f, 1.0f, 0.0f));
+    camera.rotate(-0.1f * y, glm::vec3(1.0f, 0.0f, 0.0f));
 }

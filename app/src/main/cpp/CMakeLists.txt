@@ -35,6 +35,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/utils/OpenGLUtils.cpp
         game/utils/MathUtils.cpp
         game/camera/Camera.cpp
+        game/light/Light.cpp
 )
 
 find_library(gles-lib GLESv3)

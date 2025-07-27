@@ -22,6 +22,14 @@ JNIEXPORT void JNICALL
 Java_com_siradze_workingwithc_GameRenderer_onSurfaceChangedBridge(JNIEnv *env, jobject thiz, jint width, jint height) {
     gameRenderer.onSurfaceChanged(width, height);
 }
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_siradze_workingwithc_GameRenderer_onDragBridge(JNIEnv *env, jobject thiz, jfloat x,
+                                                        jfloat y) {
+    gameRenderer.onDrag(x, y);
+}
+
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_siradze_workingwithc_GameRenderer_onDestroyBridge(JNIEnv *env, jobject thiz) {

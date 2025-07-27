@@ -31,10 +31,14 @@ void Camera::rotate(float angle, glm::vec3 vector) {
     view = glm::lookAt(eye, center, up);
 }
 
-void Camera::setUniform(unsigned int u_view, unsigned int u_projection) {
+void Camera::setUniform(
+        unsigned int u_view,
+        unsigned int u_projection,
+        unsigned int u_camera_position
+) {
     glUniformMatrix4fv(u_view, 1, GL_FALSE, &view[0][0]);
     glUniformMatrix4fv(u_projection, 1, GL_FALSE, &projection[0][0]);
-
+    glUniform3f(u_camera_position, eye.x, eye.y, eye.z);
 }
 
 
