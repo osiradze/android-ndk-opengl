@@ -12,11 +12,14 @@
 class GameRenderer {
 public:
     Cube cube = Cube();
+    Cube cube2 = Cube();
+    Cube cube3 = Cube();
+
     Cube lightCube = Cube();
     glm::mat4 lightScaleModel = glm::mat4(1.0f);
 
     Environment env = Environment();
-    std::array<GameObject*, 2> gameObjects {};
+    std::array<GameObject*, 4> gameObjects {};
 
     void onSurfaceCreated();
 

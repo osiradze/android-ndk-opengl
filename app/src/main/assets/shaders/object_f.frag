@@ -35,7 +35,6 @@ void main() {
     vec3 diffuse = lightIntensity * u_light_color;
 
 
-    float specularStrength = 0.5;
     vec3 reflectedLightDirection = reflect(-lightDirection, v_normal);
     float specularColorIntensity = pow(max(dot(reflectedLightDirection, v_camera_position), 0.0), 32.0);
 

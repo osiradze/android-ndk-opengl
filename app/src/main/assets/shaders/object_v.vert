@@ -22,7 +22,7 @@ void main() {
     gl_Position = u_projection * u_view * u_model * vec4(a_pos, 1.0);
     v_texture_coord = a_texture_coord;
     v_color = a_color;
-    v_normal = vec3(u_model * vec4(a_normal, 1.0));;
+    v_normal = a_normal;
     v_pos = vec3(u_model * vec4(a_pos, 1.0));
     v_camera_position = normalize(u_camera_position - v_pos);
 }
