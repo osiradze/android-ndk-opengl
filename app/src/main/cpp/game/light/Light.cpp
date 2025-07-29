@@ -6,10 +6,11 @@
 #include "../utils/MathUtils.h"
 #include <glm/ext/matrix_transform.hpp>
 
-void Light::setUniforms(int u_light_position, int u_light_color, int u_light_intensity) const {
+void Light::setUniforms(int u_light_position, int u_light_color, int u_light_intensity, int u_ambient_amount) const {
     glUniform3f(u_light_position, light_position.x, light_position.y, light_position.z);
     glUniform3f(u_light_color, light_color.x, light_color.y, light_color.z);
     glUniform1f(u_light_intensity, light_intensity);
+    glUniform1f(u_ambient_amount, ambient_amount);
 }
 
 void Light::rotate(float angle, glm::vec3 vector) {

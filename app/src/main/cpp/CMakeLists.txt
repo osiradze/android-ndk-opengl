@@ -31,11 +31,12 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         ResourcesBridge.cpp
         game/GameRendererBridge.cpp
         game/GameRenderer.cpp
-        game/objects/box/Box.cpp
+        game/objects/base/GLObjectImpl.cpp
         game/utils/OpenGLUtils.cpp
         game/utils/MathUtils.cpp
         game/camera/Camera.cpp
         game/light/Light.cpp
+        game/environment/Environment.cpp
 )
 
 find_library(gles-lib GLESv3)

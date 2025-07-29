@@ -5,17 +5,16 @@
 #include "objects/base/GameObject.h"
 #include "camera/Camera.h"
 #include "light/Light.h"
+#include "environment/Environment.h"
+#include "objects/box/Cube.h"
 #include <array>
 
 class GameRenderer {
     public:
-        Camera camera = Camera::createDefaultCamera();
-        Light light = Light(
-                glm::vec3(5.0f, 0.5f, 5.0f),
-                glm::vec3(0.7f, 0.5f, 1.0f),
-                2.0f
-        );
-        std::array<GameObject*, 2> gameObjects {};
+
+        Cube cube = Cube();
+        Environment env = Environment();
+        std::array<GameObject*, 1> gameObjects {};
 
         void onSurfaceCreated();
 
