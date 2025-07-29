@@ -14,6 +14,7 @@
 
 #include "glm/mat4x4.hpp" // glm::mat4
 #include "glm/ext/matrix_transform.hpp"
+#include "ShadersPaths.h"
 
 
 class GLObjectImpl : public GameObject, private GLObject {
@@ -22,12 +23,13 @@ public:
 
     explicit GLObjectImpl(
             Environment* env,
-            GLObjectData* data
-    ): env(env), data(data) {}
+            GLObjectData* data,
+            ShadersPaths shaders
+    ): env(env), data(data), shaders(shaders) {}
 
     void init() override {
         if (!data || !data->vertexData || !data->indices) return;
-        if (!OpenglUtils::createProgram(program, vertexPath, fragmentPath)) { return; }
+        if (!OpenglUtils::createProgram(program, shaders.vertexShader.c_str(), shaders.fragmentShader.c_str())) { return; }
         initUniforms();
         initData();
         initTexture();
@@ -59,8 +61,7 @@ private:
     Environment* env;
     GLObjectData* data;
 
-    const char* vertexPath = "shaders/object_v.vert";
-    const char* fragmentPath = "shaders/object_f.frag";
+    ShadersPaths shaders;
 
 
     static const unsigned int numberOfTextures = 3;

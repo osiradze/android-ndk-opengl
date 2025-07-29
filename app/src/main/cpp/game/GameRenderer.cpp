@@ -8,8 +8,7 @@
 #include <glm/glm.hpp>
 
 void GameRenderer::onSurfaceCreated() {
-    gameObjects[0] = new GLObjectImpl(&env, &(cube.data));
-
+    initLogics();
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->init();
@@ -18,8 +17,7 @@ void GameRenderer::onSurfaceCreated() {
 }
 
 void GameRenderer::onDrawFrame() {
-    env.light.rotate(40, glm::vec3(0.0f, 1.0f, 0.0f));
-
+    drawLogics();
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->onDraw();

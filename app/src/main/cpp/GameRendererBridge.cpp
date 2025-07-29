@@ -3,7 +3,7 @@
 //
 
 #include <jni.h>
-#include "GameRenderer.h"
+#include "game/GameRenderer.h"
 
 GameRenderer gameRenderer = GameRenderer();
 

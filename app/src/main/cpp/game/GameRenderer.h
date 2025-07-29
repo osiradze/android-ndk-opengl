@@ -10,19 +10,26 @@
 #include <array>
 
 class GameRenderer {
-    public:
+public:
+    Cube cube = Cube();
+    Cube lightCube = Cube();
+    glm::mat4 lightScaleModel = glm::mat4(1.0f);
 
-        Cube cube = Cube();
-        Environment env = Environment();
-        std::array<GameObject*, 1> gameObjects {};
+    Environment env = Environment();
+    std::array<GameObject*, 2> gameObjects {};
 
-        void onSurfaceCreated();
+    void onSurfaceCreated();
 
-        void onDrawFrame();
+    void onDrawFrame();
 
-        void onSurfaceChanged(int width, int height);
+    void onSurfaceChanged(int width, int height);
 
-        void onDrag(float x, float y);
+    void onDrag(float x, float y);
 
-        void onDestroy();
+    void onDestroy();
+
+private:
+    void initLogics();
+    void drawLogics();
+
 };

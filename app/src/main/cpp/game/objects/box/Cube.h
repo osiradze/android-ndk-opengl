@@ -7,7 +7,7 @@
 #include "../base/GameObjectData.h"
 
 class Cube {
-public:
+private:
     static const int dataCount = 264;
     float* cubeVertexData = new float[dataCount] {
             // Back face (z = -0.5) - Normal: (0, 0, -1)
@@ -62,7 +62,7 @@ public:
             // Top face
             20, 21, 22, 22, 23, 20
     };
-
+public:
     GLObjectData data = GLObjectData(
             glm::mat4(1.0f),
             11,  // number of floats per vertex
