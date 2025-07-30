@@ -34,7 +34,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         assets/AssetManager.cpp
         ResourcesBridge.cpp
 
-        game/objects/base/GLObjectImpl.cpp
+        game/objects/GLObjectImpl.cpp
         game/utils/OpenGLUtils.cpp
         game/utils/MathUtils.cpp
         game/camera/Camera.cpp

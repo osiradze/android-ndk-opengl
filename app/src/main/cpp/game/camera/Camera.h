@@ -19,18 +19,6 @@ public:
 
     void setUniform(unsigned int view, unsigned int projection, unsigned int cameraPosition);
 
-    static Camera createDefaultCamera() {
-        return {
-            glm::vec3(5.0f, 5.0f, 5.0f),
-            glm::vec3(0.0f, 0.0f, 0.0f),
-            glm::vec3(0.0f, 1.0f, 0.0f),
-            45.0f,
-            1.0f,
-            0.1f,
-            100.0f
-        };
-    }
-
 private:
     glm::vec3 eye, center, up;
     float fov, ratio, nearPlane, farPlane;

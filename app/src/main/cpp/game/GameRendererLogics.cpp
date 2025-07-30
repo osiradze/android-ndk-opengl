@@ -4,9 +4,10 @@
 
 
 #include "GameRenderer.h"
-#include "objects/base/GLObjectImpl.cpp"
+#include "objects/GLObjectImpl.cpp"
 #include "light/Light.h"
 #include "objects/box/Cube.h"
+#include "utils/MathUtils.h"
 #include <glm/glm.hpp>
 
 void GameRenderer::initLogics(){
@@ -26,9 +27,12 @@ void GameRenderer::initLogics(){
     lightScaleModel = glm::scale(lightScaleModel, glm::vec3(0.2f, 0.2f, 0.2f));
     lightCube.data.model = glm::translate(glm::mat4(1.0), env.light.light_position) * lightScaleModel;
     gameObjects[3] = new GLObjectImpl(&env, &(lightCube.data), lightShaders );
+
 }
 
 void GameRenderer::drawLogics() {
     env.light.rotate(60, glm::vec3(0.0f, 1.0f, 0.0f));
     lightCube.data.model = glm::translate(glm::mat4(1.0), env.light.light_position) * lightScaleModel;
+    env.light.light_color = MathUtils::rotate(env.light.light_color, 1.0, glm::vec3(0.0f, 1.0f, 0.0f));
+
 }

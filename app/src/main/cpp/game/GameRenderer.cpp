@@ -2,7 +2,7 @@
 // Created by OSiradze on 13.07.25.
 //
 #include "GameRenderer.h"
-#include "objects/base/GLObjectImpl.cpp"
+#include "objects/GLObjectImpl.cpp"
 #include "light/Light.h"
 #include "objects/box/Cube.h"
 #include <glm/glm.hpp>

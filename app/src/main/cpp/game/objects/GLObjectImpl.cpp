@@ -3,18 +3,18 @@
 //
 
 #include <GLES3/gl3.h>
-#include "GameObject.h"
-#include "GLObject.h"
-#include "GameObjectData.h"
-#include "../../utils/OpenglUtils.h"
-#include "../../camera/Camera.h"
-#include "../../light/Light.h"
-#include "../../environment/Environment.h"
+#include "base/GameObject.h"
+#include "base/GLObject.h"
+#include "base/GameObjectData.h"
+#include "../utils/OpenglUtils.h"
+#include "../camera/Camera.h"
+#include "../light/Light.h"
+#include "../environment/Environment.h"
 #include <array>
 
 #include "glm/mat4x4.hpp" // glm::mat4
 #include "glm/ext/matrix_transform.hpp"
-#include "ShadersPaths.h"
+#include "base/ShadersPaths.h"
 
 
 class GLObjectImpl : public GameObject, private GLObject {
@@ -37,7 +37,6 @@ public:
 
     void onDraw() override {
         if (!data || !data->vertexData || !data->indices) return;
-        time++;
         glUseProgram(program);
         glBindVertexArray(vao);
         bindDrawUniforms();
@@ -56,15 +55,13 @@ public:
     }
 
 private:
-
-    int time = 0;
     Environment* env;
     GLObjectData* data;
 
     ShadersPaths shaders;
 
 
-    static const unsigned int numberOfTextures = 3;
+    static const unsigned int numberOfTextures = 2;
     unsigned int texture[numberOfTextures]{};
     int textureLocations[numberOfTextures]{};
 
@@ -98,26 +95,19 @@ private:
 
     void initTexture() {
 
-        glGenTextures(numberOfTextures, texture);
-        glActiveTexture(GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_2D, texture[0]);
-        textureLocations[0] = glGetUniformLocation(program, "u_texture_1");
-        OpenglUtils::loadTexture("textures/texture1.png");
-
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture[1]);
-        OpenglUtils::loadTexture("textures/texture2.png");
-        textureLocations[1] = glGetUniformLocation(program, "u_texture_2");
+        OpenglUtils::loadTexture("textures/texture.png");
+        textureLocations[0] = glGetUniformLocation(program, "u_texture");
 
         glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, texture[2]);
-        OpenglUtils::loadTexture("textures/texture3.png");
-        textureLocations[2] = glGetUniformLocation(program, "u_texture_3");
+        glBindTexture(GL_TEXTURE_2D, texture[1]);
+        OpenglUtils::loadTexture("textures/texture_specular.png");
+        textureLocations[1] = glGetUniformLocation(program, "u_texture_specular");
 
         glUseProgram(program);
         glUniform1i(textureLocations[0], 0);                // assign sampler to texture unit 0
         glUniform1i(textureLocations[1], 1);                // assign sampler to texture unit 1
-        glUniform1i(textureLocations[2], 2);                // assign sampler to texture unit 1
         glUseProgram(0);
     }
 
@@ -144,7 +134,6 @@ private:
         }
     }
     void bindDrawUniforms() const {
-        glUniform1i(uniforms.u_time, time);
         glUniformMatrix4fv(uniforms.u_model, 1, GL_FALSE, &data->model[0][0]);
         env->camera.setUniform(uniforms.u_view, uniforms.u_projection, uniforms.u_camera_position);
         env->light.setUniforms(uniforms.u_light_position, uniforms.u_light_color, uniforms.u_light_intensity, uniforms.u_ambient_amount);
