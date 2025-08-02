@@ -34,11 +34,7 @@ void GameRenderer::initLogics(){
     ShadersPaths lightShaders { "shaders/object_v.vert", "shaders/light_f.frag" };
     lightScaleModel = glm::scale(lightScaleModel, glm::vec3(0.2f, 0.2f, 0.2f));
     lightCube.data.model = glm::translate(glm::mat4(1.0), env.light.light_position) * lightScaleModel;
-    gameObjects[3] = new GLObjectImpl(&env, &(lightCube.data), lightShaders);
-
-
-
-
+    gameObjects[3] = new GLObjectImpl(&env, &(lightCube.data), lightShaders, std::nullopt);
 
 }
 

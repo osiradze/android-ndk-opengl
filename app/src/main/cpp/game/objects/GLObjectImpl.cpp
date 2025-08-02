@@ -26,7 +26,7 @@ public:
             Environment* env,
             GLObjectData* data,
             ShadersPaths shaders,
-            Texture texturePath = Texture()
+            std::optional<Texture> texturePath
     ): env(env), data(data), shaders(shaders), texturePath(texturePath) {}
 
     void init() override {
@@ -59,15 +59,12 @@ public:
 private:
     Environment* env;
     GLObjectData* data;
-
     ShadersPaths shaders;
 
-
-
+    std::optional<Texture> texturePath;
     static const unsigned int numberOfTextures = 2;
     unsigned int texture[numberOfTextures]{};
     int textureLocations[numberOfTextures]{};
-    Texture texturePath = Texture();
 
     void initData() {
         glGenVertexArrays(1, &vao);
@@ -102,15 +99,18 @@ private:
     }
 
     void initTexture() {
+        if(!texturePath.has_value()) {
+            return;
+        }
         glGenTextures(numberOfTextures, texture);
         glActiveTexture(GL_TEXTURE);
         glBindTexture(GL_TEXTURE_2D, texture[0]);
-        OpenglUtils::loadTexture(texturePath.diffuse.c_str());
+        OpenglUtils::loadTexture(texturePath->diffuse.c_str());
         textureLocations[0] = glGetUniformLocation(program, "u_texture");
 
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture[1]);
-        OpenglUtils::loadTexture(texturePath.specular.c_str());
+        OpenglUtils::loadTexture(texturePath->specular.c_str());
         textureLocations[1] = glGetUniformLocation(program, "u_texture_specular");
 
         glUseProgram(program);
@@ -136,6 +136,9 @@ private:
     }
 
     void activateTextures() {
+        if(!texturePath.has_value()) {
+            return;
+        }
         for (int i = 0; i < numberOfTextures; ++i) {
             glActiveTexture(GL_TEXTURE0 + i);
             glBindTexture(GL_TEXTURE_2D, texture[i]);
