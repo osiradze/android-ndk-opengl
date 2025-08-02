@@ -6,15 +6,17 @@
 #include "camera/Camera.h"
 #include "light/Light.h"
 #include "environment/Environment.h"
-#include "objects/box/Cube.h"
+#include "objects/primitives//Cube.h"
+#include "objects/primitives/Plane.h"
 #include <array>
 
 class GameRenderer {
 public:
-    Cube cube = Cube();
+    Plane floor = Plane();
+    Cube cube1 = Cube();
     Cube cube2 = Cube();
-    Cube cube3 = Cube();
-    std::unique_ptr<GLObjectData> minecraft;
+
+    std::unique_ptr<GLObjectData> lantern;
 
     Cube lightCube = Cube();
     glm::mat4 lightScaleModel = glm::mat4(1.0f);

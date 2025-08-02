@@ -15,7 +15,7 @@ out vec3 v_color;
 out vec2 v_texture_coord;
 out vec3 v_normal;
 out vec3 v_pos;
-out vec3 v_camera_position;
+out vec3 v_view_direction;
 
 void main() {
     gl_Position = u_projection * u_view * u_model * vec4(a_pos, 1.0);
@@ -23,5 +23,5 @@ void main() {
     v_color = a_color;
     v_normal = a_normal;
     v_pos = vec3(u_model * vec4(a_pos, 1.0));
-    v_camera_position = normalize(u_camera_position - v_pos);
+    v_view_direction = normalize(u_camera_position - v_pos);
 }

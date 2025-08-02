@@ -15,7 +15,7 @@ uniform vec3 u_light_position;
 uniform vec3 u_light_color;
 uniform float u_light_intensity;
 
-in vec3 v_camera_position;
+in vec3 v_view_direction;
 
 
 out vec4 FragColor;
@@ -30,7 +30,7 @@ void main() {
     vec3 diffuse = lightIntensity * u_light_color;
 
     vec3 reflectedLightDirection = reflect(-lightDirection, v_normal);
-    float specularColorIntensity = pow(max(dot(reflectedLightDirection, v_camera_position), 0.0), 32.0);
+    float specularColorIntensity = pow(max(dot(reflectedLightDirection, v_view_direction), 0.0), 32.0);
     vec3 specularColor = vec3(texture(u_texture_specular, v_texture_coord)) * specularColorIntensity;
 
     vec3 result = ((u_ambient_amount + diffuse + specularColor) * color.rgb);
