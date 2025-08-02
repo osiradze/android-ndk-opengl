@@ -32,6 +32,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/GameRendererLogics.cpp
 
         assets/AssetManager.cpp
+        object_loader/ObjectLoader.cpp
         ResourcesBridge.cpp
 
         game/objects/GLObjectImpl.cpp
@@ -52,6 +53,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         log
         ${gles-lib}
         glm
+        tinyobjloader
 )
 
 include(FetchContent)
@@ -63,3 +65,13 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(glm)
+
+FetchContent_Declare(
+        tinyobjloader
+        GIT_REPOSITORY https://github.com/tinyobjloader/tinyobjloader.git
+        GIT_TAG        v2.0.0rc13
+)
+
+FetchContent_MakeAvailable(tinyobjloader)
+
+

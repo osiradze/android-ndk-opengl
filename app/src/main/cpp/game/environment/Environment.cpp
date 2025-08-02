@@ -7,10 +7,10 @@
 
 Environment::Environment():
     camera(
-            Camera(glm::vec3(3.0f, 3.0f, 3.0f),
+            Camera(glm::vec3(4.0f, 4.0f, 4.0f),
                    glm::vec3(0.0f, 0.0f, 0.0f),
                    glm::vec3(0.0f, 1.0f, 0.0f),
-                   45.0f,
+                   50.0f,
                    1.0f,
                    0.1f,
                    100.0f)
@@ -18,9 +18,9 @@ Environment::Environment():
     light(
             Light(
         glm::vec3(1.5f, 1.5f, 1.5f),
-        glm::vec3(0.7f, 0.5f, 1.0f),
-        2.0f,
-        0.1f
+        glm::vec3(1.0f, 1.0f, 1.0f),
+        1.0f,
+        0.3f
         )
     )
 {}

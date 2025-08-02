@@ -22,10 +22,12 @@ out vec4 FragColor;
 
 void main() {
     vec4 color = texture(u_texture, v_texture_coord);
+    if(color.a < 0.1) {
+        discard;
+    }
     vec3 lightDirection = normalize(u_light_position - v_pos);
     float lightIntensity = max(dot(v_normal, lightDirection), 0.0) * u_light_intensity;
     vec3 diffuse = lightIntensity * u_light_color;
-
 
     vec3 reflectedLightDirection = reflect(-lightDirection, v_normal);
     float specularColorIntensity = pow(max(dot(reflectedLightDirection, v_camera_position), 0.0), 32.0);

@@ -3,36 +3,12 @@
 //
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <cstdio>
 #include "OpenglUtils.h"
 #include "../../assets/AssetManager.h"
 #include "../../image/stb_image.h"
 #include <GLES3/gl3.h>
 #include <android/log.h>
-
-#include <fstream>
-#include <sstream>
 #include <string>
-
-std::string OpenglUtils::loadShaderFromFile(const char *filePath) {
-    auto assetManager = AssetManager::assetManager;
-    if (!assetManager) {
-        __android_log_print(ANDROID_LOG_ERROR, "ShaderLoader", "AssetManager is null!");
-        return "";
-    }
-
-    AAsset* file = AAssetManager_open(assetManager, filePath, AASSET_MODE_BUFFER);
-    if (!file) {
-        __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "Failed to open: %s", filePath);
-        return "";
-    }
-
-    size_t size = AAsset_getLength(file);
-    std::string content(size, '\0');
-    AAsset_read(file, content.data(), size);
-    AAsset_close(file);
-    return content;
-}
 
 bool OpenglUtils::createShader(int type, const char *code, unsigned int &shader) {
     shader = glCreateShader(type);
@@ -67,8 +43,8 @@ bool OpenglUtils::createProgram(unsigned int vertexShader, unsigned int fragment
 
 
 bool OpenglUtils::createProgram(unsigned int &program, const char *vertexPath, const char *fragmentPath) {
-    std::string vertexShaderSource = OpenglUtils::loadShaderFromFile(vertexPath);
-    std::string fragmentShaderSource =  OpenglUtils::loadShaderFromFile(fragmentPath);
+    std::string vertexShaderSource = AssetManager::getFileStringContent(vertexPath);
+    std::string fragmentShaderSource = AssetManager::getFileStringContent(fragmentPath);
     if(vertexShaderSource.empty() || fragmentShaderSource.empty()) {
         __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "Failed to load shader source from files: %s, %s", vertexPath, fragmentPath);
         return false;
@@ -83,47 +59,17 @@ bool OpenglUtils::createProgram(unsigned int &program, const char *vertexPath, c
     auto success = OpenglUtils::createProgram(vertexShader, fragmentShader, program);
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-    __android_log_print(ANDROID_LOG_INFO, "OpenglUtils", "Program created successfully: %d", success);
     return success;
-}
-
-unsigned char* OpenglUtils::loadImageFromAssets(const char* assetPath, int& width, int& height, int& channels) {
-    auto assetManager = AssetManager::assetManager;
-    if (!assetManager) {
-        __android_log_print(ANDROID_LOG_ERROR, "ImageLoader", "AssetManager not set");
-        return nullptr;
-    }
-
-    AAsset* asset = AAssetManager_open(assetManager, assetPath, AASSET_MODE_BUFFER);
-    if (!asset) {
-        __android_log_print(ANDROID_LOG_ERROR, "ImageLoader", "Failed to open asset: %s", assetPath);
-        return nullptr;
-    }
-
-    off_t length = AAsset_getLength(asset);
-    auto* buffer = new unsigned char[length];
-    AAsset_read(asset, buffer, length);
-    AAsset_close(asset);
-
-    stbi_set_flip_vertically_on_load(true);
-    unsigned char* image = stbi_load_from_memory(buffer, length, &width, &height, &channels, 4);
-    delete[] buffer;
-
-    if (!image) {
-        __android_log_print(ANDROID_LOG_ERROR, "ImageLoader", "stb_image failed: %s", stbi_failure_reason());
-    }
-
-    return image;
 }
 
 void OpenglUtils::loadTexture(const char *assetPath) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     int w, h, ch;
-    unsigned char* data = OpenglUtils::loadImageFromAssets(assetPath, w, h, ch);
+    unsigned char* data = AssetManager::loadImageFromAssets(assetPath, w, h, ch);
 
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);

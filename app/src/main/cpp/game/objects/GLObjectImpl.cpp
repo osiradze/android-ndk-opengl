@@ -15,6 +15,7 @@
 #include "glm/mat4x4.hpp" // glm::mat4
 #include "glm/ext/matrix_transform.hpp"
 #include "base/ShadersPaths.h"
+#include "texture/Texture.h"
 
 
 class GLObjectImpl : public GameObject, private GLObject {
@@ -24,8 +25,9 @@ public:
     explicit GLObjectImpl(
             Environment* env,
             GLObjectData* data,
-            ShadersPaths shaders
-    ): env(env), data(data), shaders(shaders) {}
+            ShadersPaths shaders,
+            Texture texturePath = Texture()
+    ): env(env), data(data), shaders(shaders), texturePath(texturePath) {}
 
     void init() override {
         if (!data || !data->vertexData || !data->indices) return;
@@ -61,9 +63,11 @@ private:
     ShadersPaths shaders;
 
 
+
     static const unsigned int numberOfTextures = 2;
     unsigned int texture[numberOfTextures]{};
     int textureLocations[numberOfTextures]{};
+    Texture texturePath = Texture();
 
     void initData() {
         glGenVertexArrays(1, &vao);
@@ -73,15 +77,19 @@ private:
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, data->vertexDataSize, data->vertexData.get(), GL_STATIC_DRAW);
 
+        // vertex attributes
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, data->stride, (void*)0);
         glEnableVertexAttribArray(0);
 
+        // normal attributes
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, data->stride, (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
+        // texture coordinate attributes
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, data->stride, (void*)(6 * sizeof(float)));
         glEnableVertexAttribArray(2);
 
+        // color attributes
         glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, data->stride, (void*)(8 * sizeof(float)));
         glEnableVertexAttribArray(3);
 
@@ -94,15 +102,15 @@ private:
     }
 
     void initTexture() {
-
-        glActiveTexture(GL_TEXTURE2);
+        glGenTextures(numberOfTextures, texture);
+        glActiveTexture(GL_TEXTURE);
         glBindTexture(GL_TEXTURE_2D, texture[0]);
-        OpenglUtils::loadTexture("textures/texture.png");
+        OpenglUtils::loadTexture(texturePath.diffuse.c_str());
         textureLocations[0] = glGetUniformLocation(program, "u_texture");
 
-        glActiveTexture(GL_TEXTURE2);
+        glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture[1]);
-        OpenglUtils::loadTexture("textures/texture_specular.png");
+        OpenglUtils::loadTexture(texturePath.specular.c_str());
         textureLocations[1] = glGetUniformLocation(program, "u_texture_specular");
 
         glUseProgram(program);
