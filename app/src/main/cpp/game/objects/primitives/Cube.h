@@ -64,11 +64,9 @@ private:
     };
 public:
     GLObjectData data = GLObjectData(
-            glm::mat4(1.0f),
             11,  // number of floats per vertex
             dataCount,
             std::unique_ptr<float[]>(cubeVertexData),
             indicesDataCount,
             std::unique_ptr<unsigned int[]>(indices));
-
 };

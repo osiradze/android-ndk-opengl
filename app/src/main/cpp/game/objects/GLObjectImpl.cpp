@@ -145,7 +145,7 @@ private:
         }
     }
     void bindDrawUniforms() const {
-        glUniformMatrix4fv(uniforms.u_model, 1, GL_FALSE, &data->model[0][0]);
+        glUniformMatrix4fv(uniforms.u_model, 1, GL_FALSE, &data->getTranslation()->getModel()[0][0]);
         env->camera.setUniform(uniforms.u_view, uniforms.u_projection, uniforms.u_camera_position);
         env->light.setUniforms(uniforms.u_light_position, uniforms.u_light_color, uniforms.u_light_intensity, uniforms.u_ambient_amount);
     }

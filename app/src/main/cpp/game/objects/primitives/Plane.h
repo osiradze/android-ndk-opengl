@@ -23,7 +23,6 @@ private:
 
 public:
     GLObjectData data = GLObjectData(
-            glm::mat4(1.0f),
             11,  // floats per vertex
             dataCount,
             std::unique_ptr<float[]>(planeVertexData),
