@@ -7,4 +7,5 @@
 struct ShadersPaths {
     std::string vertexShader;
     std::string fragmentShader;
+    std::string stencilFragmentShader = "shaders/stencil_f.frag";
 };

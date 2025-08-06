@@ -30,6 +30,11 @@ public:
         updateModelMatrix();
     }
 
+    void scaleUp(const glm::vec3 s) {
+        this->scale *= s;
+        updateModelMatrix();
+    }
+
     void setRotation(const glm::vec3 r) {
         this->rotation = r;
         updateModelMatrix();
@@ -55,6 +60,6 @@ private:
         // Combine: T * R * S (order matters!)
         model = glm::translate(glm::mat4(1.0f), position);
         model *= rot;
-        model = glm::scale(model, scale);
+        model *= glm::scale(glm::mat4(1.0f), scale);
     }
 };

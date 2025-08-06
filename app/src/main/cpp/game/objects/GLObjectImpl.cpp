@@ -24,15 +24,24 @@ class GLObjectImpl : public GameObject, private GLObject {
 public:
 
     explicit GLObjectImpl(
-            Environment* env,
-            GLObjectData* data,
+            Environment *env,
+            GLObjectData *data,
             ShadersPaths shaders,
-            std::optional<Texture> texturePath
-    ): env(env), data(data), shaders(std::move(shaders)), texturePath(std::move(texturePath)) {}
+            std::optional<Texture> texturePath,
+            bool outline = false
+    )
+            : env(env), data(data), shaders(std::move(shaders)),
+              texturePath(std::move(texturePath)), outline(outline) {}
 
     void init() override {
         if (!data || !data->vertexData || !data->indices) return;
-        if (!OpenglUtils::createProgram(program, shaders.vertexShader.c_str(), shaders.fragmentShader.c_str())) { return; }
+
+        // init programs
+        if (!OpenglUtils::createProgram(shaderProgram.id, shaders.vertexShader.c_str(),
+                                        shaders.fragmentShader.c_str())) { return; }
+        OpenglUtils::createProgram(stencilProgram.id, shaders.vertexShader.c_str(),
+                                   shaders.stencilFragmentShader.c_str());
+
         initUniforms();
         initData();
         initTexture();
@@ -40,11 +49,13 @@ public:
 
     void onDraw() override {
         if (!data || !data->vertexData || !data->indices) return;
-        glUseProgram(program);
+        glUseProgram(shaderProgram.id);
         glBindVertexArray(vao);
-        bindDrawUniforms();
+        updateUniforms(shaderProgram);
         activateTextures();
+        setUpDrawStencil();
         glDrawElements(GL_TRIANGLES, data->indicesCount, GL_UNSIGNED_INT, nullptr);
+        drawOutLine();
         glBindVertexArray(0);
         glUseProgram(0);
     }
@@ -53,19 +64,22 @@ public:
         glDeleteVertexArrays(1, &vao);
         glDeleteBuffers(1, &vbo);
         glDeleteBuffers(1, &ebo);
-        glDeleteProgram(program);
+        glDeleteProgram(shaderProgram.id);
+        glDeleteProgram(stencilProgram.id);
         glDeleteTextures(2, texture);
     }
 
 private:
-    Environment* env;
-    GLObjectData* data;
+    Environment *env;
+    GLObjectData *data;
     ShadersPaths shaders;
 
     std::optional<Texture> texturePath;
     static const unsigned int numberOfTextures = 2;
     unsigned int texture[numberOfTextures]{};
     int textureLocations[numberOfTextures]{};
+
+    bool outline = false;
 
     void initData() {
         glGenVertexArrays(1, &vao);
@@ -76,52 +90,54 @@ private:
         glBufferData(GL_ARRAY_BUFFER, data->vertexDataSize, data->vertexData.get(), GL_STATIC_DRAW);
 
         // vertex attributes
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, data->stride, (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, data->stride, (void *) 0);
         glEnableVertexAttribArray(0);
 
         // normal attributes
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, data->stride, (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, data->stride, (void *) (3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
         // texture coordinate attributes
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, data->stride, (void*)(6 * sizeof(float)));
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, data->stride, (void *) (6 * sizeof(float)));
         glEnableVertexAttribArray(2);
 
         // color attributes
-        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, data->stride, (void*)(8 * sizeof(float)));
+        glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, data->stride, (void *) (8 * sizeof(float)));
         glEnableVertexAttribArray(3);
 
         glGenBuffers(1, &ebo);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indicesSize, data->indices.get(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indicesSize, data->indices.get(),
+                     GL_STATIC_DRAW);
 
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     void initTexture() {
-        if(!texturePath.has_value()) {
+        if (!texturePath.has_value()) {
             return;
         }
         glGenTextures(numberOfTextures, texture);
         glActiveTexture(GL_TEXTURE);
         glBindTexture(GL_TEXTURE_2D, texture[0]);
         OpenglUtils::loadTexture(texturePath->diffuse.c_str());
-        textureLocations[0] = glGetUniformLocation(program, "u_texture");
+        textureLocations[0] = glGetUniformLocation(shaderProgram.id, "u_texture");
 
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture[1]);
         OpenglUtils::loadTexture(texturePath->specular.c_str());
-        textureLocations[1] = glGetUniformLocation(program, "u_texture_specular");
+        textureLocations[1] = glGetUniformLocation(shaderProgram.id, "u_texture_specular");
 
-        glUseProgram(program);
+        glUseProgram(shaderProgram.id);
         glUniform1i(textureLocations[0], 0);                // assign sampler to texture unit 0
         glUniform1i(textureLocations[1], 1);                // assign sampler to texture unit 1
         glUseProgram(0);
     }
 
     void initUniforms() {
-        uniforms.init(program);
+        shaderProgram.uniforms.init(shaderProgram.id);
+        stencilProgram.uniforms.init(stencilProgram.id);
         setRatio(1.0f);
     }
 
@@ -131,13 +147,14 @@ private:
     }
 
     void setRatio(float ratio) {
-        glUseProgram(program);
-        glUniform1f(uniforms.u_ratio, ratio);
+        glUseProgram(shaderProgram.id);
+        glUniform1f(shaderProgram.uniforms.u_ratio, ratio);
+        glUniform1f(stencilProgram.uniforms.u_ratio, ratio);
         glUseProgram(0);
     }
 
     void activateTextures() {
-        if(!texturePath.has_value()) {
+        if (!texturePath.has_value()) {
             return;
         }
         for (int i = 0; i < numberOfTextures; ++i) {
@@ -145,10 +162,34 @@ private:
             glBindTexture(GL_TEXTURE_2D, texture[i]);
         }
     }
-    void bindDrawUniforms() const {
-        glUniformMatrix4fv(uniforms.u_model, 1, GL_FALSE, &data->getTranslation()->getModel()[0][0]);
-        env->camera.setUniform(uniforms.u_view, uniforms.u_projection, uniforms.u_camera_position);
-        env->light.setUniforms(uniforms.u_light_position, uniforms.u_light_color, uniforms.u_light_intensity, uniforms.u_ambient_amount);
+
+    void updateUniforms(Program &program) {
+        glUniformMatrix4fv(program.uniforms.u_model, 1, GL_FALSE, &data->getTranslation()->getModel()[0][0]);
+        env->camera.setUniform(program.uniforms.u_view, program.uniforms.u_projection, program.uniforms.u_camera_position);
+        env->light.setUniforms(program.uniforms.u_light_position, program.uniforms.u_light_color,
+                               program.uniforms.u_light_intensity, program.uniforms.u_ambient_amount);
     }
 
+    void setUpDrawStencil() const {
+        if (!outline) return;
+        glStencilFunc(GL_ALWAYS, 1, 0xFF); // draw object fully in stencil buffer
+        glStencilMask(0xFF); // enable writing to the stencil buffer
+        glStencilOp(GL_KEEP, GL_KEEP,
+                    GL_REPLACE); // replace stencil then depth and stencil test passes
+    }
+
+    void drawOutLine() {
+        if (!outline) return;
+        glStencilMask(0x00); // don't write in stencil buffer
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // draw only where stencil is not equal to 1
+
+        glUseProgram(stencilProgram.id);
+        data->getTranslation()->setScale(glm::vec3(1.01));
+        updateUniforms(stencilProgram);
+        glDrawElements(GL_TRIANGLES, data->indicesCount, GL_UNSIGNED_INT, nullptr);
+        data->getTranslation()->setScale(glm::vec3(1.0));
+
+        glStencilFunc(GL_ALWAYS, 1, 0xFF); // reset stencil function
+        glStencilMask(0xFF);
+    }
 };

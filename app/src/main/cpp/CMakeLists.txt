@@ -29,7 +29,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
 
         GameRendererBridge.cpp
         game/GameRenderer.cpp
-        game/ObjectLogics.cpp
+        game/WorldLogic.cpp
         game/GameGLConfig.cpp
 
         assets/AssetManager.cpp

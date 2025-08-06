@@ -30,7 +30,7 @@ void GameRenderer::initObject(){
 
     cube2.data.getTranslation()->setPosition(glm::vec3(1.0f, 0.0f, 0.0f));
     cube2.data.getTranslation()->setRotation(glm::vec3(0.0f, 45.0f, 0.0f));
-    gameObjects[2] = new GLObjectImpl(&env, &(cube2.data), objectShader, cubeTexture);
+    gameObjects[2] = new GLObjectImpl(&env, &(cube2.data), objectShader, cubeTexture, true);
 
 
     ShadersPaths lightShaders { "shaders/object_v.vert", "shaders/light_f.frag" };

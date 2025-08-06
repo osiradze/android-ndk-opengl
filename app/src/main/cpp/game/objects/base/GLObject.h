@@ -3,15 +3,14 @@
 //
 
 #include "glm/ext/matrix_float4x4.hpp"
-#include "../uniform/Uniforms.h"
+#include "../shaders/Program.h"
 
 class GLObject {
 protected:
-    unsigned int program = 0;
+    Program shaderProgram;
+    Program stencilProgram;
 
     unsigned int vao = 0;
     unsigned int vbo = 0;
     unsigned int ebo = 0;
-
-    CommonUniforms uniforms = {};
 };
