@@ -34,4 +34,5 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_siradze_workingwithc_GameRenderer_onDestroyBridge(JNIEnv *env, jobject thiz) {
     gameRenderer.onDestroy();
+    delete &gameRenderer;
 }

@@ -12,17 +12,6 @@
 
 class GameRenderer {
 public:
-    Plane floor = Plane();
-    Cube cube1 = Cube();
-    Cube cube2 = Cube();
-
-    std::unique_ptr<GLObjectData> lantern;
-
-    Cube lightCube = Cube();
-    glm::mat4 lightScaleModel = glm::mat4(1.0f);
-
-    Environment env = Environment();
-    std::array<GameObject*, 5> gameObjects {};
 
     void onSurfaceCreated();
 
@@ -35,7 +24,22 @@ public:
     void onDestroy();
 
 private:
-    void initLogics();
-    void drawLogics();
+    Plane floor = Plane();
+    Cube cube1 = Cube();
+    Cube cube2 = Cube();
+
+    std::unique_ptr<GLObjectData> lantern;
+
+    Cube lightCube = Cube();
+    glm::mat4 lightScaleModel = glm::mat4(1.0f);
+
+    Environment env = Environment();
+    std::array<GameObject*, 5> gameObjects {};
+
+    void initObject();
+    void updateObjects();
+
+    static void initGLConfig();
+    static void clearBuffers();
 
 };

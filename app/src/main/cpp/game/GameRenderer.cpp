@@ -7,7 +7,8 @@
 #include <glm/glm.hpp>
 
 void GameRenderer::onSurfaceCreated() {
-    initLogics();
+    initGLConfig();
+    initObject();
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->init();
@@ -16,7 +17,8 @@ void GameRenderer::onSurfaceCreated() {
 }
 
 void GameRenderer::onDrawFrame() {
-    drawLogics();
+    clearBuffers();
+    updateObjects();
     for (GameObject* obj : gameObjects) {
         if (obj) {
             obj->onDraw();

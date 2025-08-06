@@ -12,7 +12,7 @@
 #include <glm/glm.hpp>
 #include <android/log.h>
 
-void GameRenderer::initLogics(){
+void GameRenderer::initObject(){
 
     ShadersPaths objectShader {"shaders/object_v.vert", "shaders/object_f.frag" };
     lantern = ObjectLoader::loadObject("models/lantern.obj");
@@ -44,9 +44,8 @@ void GameRenderer::initLogics(){
     gameObjects[4] = new GLObjectImpl(&env, &(floor.data), objectShader, floorTexture);
 }
 
-void GameRenderer::drawLogics() {
+void GameRenderer::updateObjects() {
     env.light.rotate(60, glm::vec3(0.0f, 1.0f, 0.0f));
     lightCube.data.getTranslation()->setPosition(env.light.light_position);
-    //env.light.light_color = MathUtils::rotate(env.light.light_color, 1.0, glm::vec3(0.0f, 1.0f, 0.0f));
-
+    env.light.light_color = MathUtils::rotate(env.light.light_color, 1.0, glm::vec3(0.0f, 1.0f, 0.0f));
 }

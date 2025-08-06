@@ -11,6 +11,7 @@
 #include "../light/Light.h"
 #include "../environment/Environment.h"
 #include <array>
+#include <utility>
 
 #include "glm/mat4x4.hpp" // glm::mat4
 #include "glm/ext/matrix_transform.hpp"
@@ -27,7 +28,7 @@ public:
             GLObjectData* data,
             ShadersPaths shaders,
             std::optional<Texture> texturePath
-    ): env(env), data(data), shaders(shaders), texturePath(texturePath) {}
+    ): env(env), data(data), shaders(std::move(shaders)), texturePath(std::move(texturePath)) {}
 
     void init() override {
         if (!data || !data->vertexData || !data->indices) return;

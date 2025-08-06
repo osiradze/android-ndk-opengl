@@ -21,7 +21,7 @@ class GameView(context: Context, attrs: AttributeSet) : GLSurfaceView(context) {
         gameRenderer.onDestroy()
     }
 
-    fun initTouch() {
+    private fun initTouch() {
 
         var lastX = 0f
         var lastY = 0f
@@ -41,7 +41,6 @@ class GameView(context: Context, attrs: AttributeSet) : GLSurfaceView(context) {
                     val deltaX = currentX - lastX
                     val deltaY = currentY - lastY
 
-                    // 👇 Use deltaX and deltaY here
                     gameRenderer.onDragBridge(deltaX, deltaY)
 
                     lastX = currentX
