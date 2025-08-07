@@ -184,10 +184,11 @@ private:
         glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // draw only where stencil is not equal to 1
 
         glUseProgram(stencilProgram.id);
-        data->getTranslation()->setScale(glm::vec3(1.01));
+        glm::vec3 scale = data->getTranslation()->getScale();
+        data->getTranslation()->setScale(scale * 1.01f); // scale up for outline effect
         updateUniforms(stencilProgram);
         glDrawElements(GL_TRIANGLES, data->indicesCount, GL_UNSIGNED_INT, nullptr);
-        data->getTranslation()->setScale(glm::vec3(1.0));
+        data->getTranslation()->setScale(scale);
 
         glStencilFunc(GL_ALWAYS, 1, 0xFF); // reset stencil function
         glStencilMask(0xFF);

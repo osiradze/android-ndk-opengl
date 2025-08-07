@@ -35,6 +35,10 @@ public:
         updateModelMatrix();
     }
 
+    [[nodiscard]] glm::vec3 getScale() const {
+        return this->scale;
+    }
+
     void setRotation(const glm::vec3 r) {
         this->rotation = r;
         updateModelMatrix();
