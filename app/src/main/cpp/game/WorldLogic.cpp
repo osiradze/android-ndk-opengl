@@ -34,18 +34,25 @@ void GameRenderer::initObject(){
 
 
     ShadersPaths lightShaders { "shaders/object_v.vert", "shaders/light_f.frag" };
-    lightCube.data.getTranslation()->setPosition(env.light.light_position);
-    lightCube.data.getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
-    gameObjects[3] = new GLObjectImpl(&env, &(lightCube.data), lightShaders, std::nullopt);
+    lightCube1.data.getTranslation()->setPosition(env.lights[0].light_position);
+    lightCube1.data.getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
+    gameObjects[3] = new GLObjectImpl(&env, &(lightCube1.data), lightShaders, std::nullopt);
+
+    lightCube2.data.getTranslation()->setPosition(env.lights[1].light_position);
+    lightCube2.data.getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
+    gameObjects[4] = new GLObjectImpl(&env, &(lightCube2.data), lightShaders, std::nullopt);
 
     Texture floorTexture {"textures/floor_diffuse.png", "textures/floor_specular.png"};
     floor.data.getTranslation()->setPosition(glm::vec3(0.0f, -0.5f, 1.0f));
     floor.data.getTranslation()->setScale(glm::vec3(7.0));
-    gameObjects[4] = new GLObjectImpl(&env, &(floor.data), objectShader, floorTexture);
+    gameObjects[5] = new GLObjectImpl(&env, &(floor.data), objectShader, floorTexture);
 }
 
 void GameRenderer::updateObjects() {
-    env.light.rotate(60, glm::vec3(0.0f, 1.0f, 0.0f));
-    lightCube.data.getTranslation()->setPosition(env.light.light_position);
-    env.light.light_color = MathUtils::rotate(env.light.light_color, 1.0, glm::vec3(0.0f, 1.0f, 0.0f));
+    for(auto &light : env.lights) {
+        light.rotate(60, glm::vec3(0.0f, 1.0f, 0.0f));
+    }
+    lightCube1.data.getTranslation()->setPosition(env.lights[0].light_position);
+    lightCube2.data.getTranslation()->setPosition(env.lights[1].light_position);
+//    env.lights.light_color = MathUtils::rotate(env.lights.light_color, 1.0, glm::vec3(0.0f, 1.0f, 0.0f));
 }

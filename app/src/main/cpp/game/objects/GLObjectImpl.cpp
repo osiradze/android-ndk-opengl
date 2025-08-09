@@ -136,7 +136,7 @@ private:
     }
 
     void initUniforms() {
-        shaderProgram.uniforms.init(shaderProgram.id);
+        shaderProgram.uniforms.init(shaderProgram.id, 2);
         stencilProgram.uniforms.init(stencilProgram.id);
         setRatio(1.0f);
     }
@@ -166,7 +166,10 @@ private:
     void updateUniforms(Program &program) {
         glUniformMatrix4fv(program.uniforms.camera.u_model, 1, GL_FALSE, &data->getTranslation()->getModel()[0][0]);
         env->camera.setUniform(program.uniforms.camera);
-        env->light.setUniforms(program.uniforms.light);
+        glUniform1i(program.uniforms.number_of_lights, program.uniforms.light.size());
+        for (int i = 0; i < program.uniforms.light.size(); i++) {
+            env->lights[i].setUniforms(program.uniforms.light[i]);
+        }
     }
 
     void setUpDrawStencil() const {

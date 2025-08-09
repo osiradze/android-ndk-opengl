@@ -30,11 +30,13 @@ private:
 
     std::unique_ptr<GLObjectData> lantern;
 
-    Cube lightCube = Cube();
+    Cube lightCube1 = Cube();
+    Cube lightCube2 = Cube();
+
     glm::mat4 lightScaleModel = glm::mat4(1.0f);
 
     Environment env = Environment();
-    std::array<GameObject*, 5> gameObjects {};
+    std::array<GameObject*, 6> gameObjects {};
 
     void initObject();
     void updateObjects();

@@ -6,11 +6,12 @@
 
 #include "../camera/Camera.h"
 #include "../light/Light.h"
+#include <vector>
 
 class Environment {
 public:
     Camera camera;
-    Light light;
+    std::vector<Light> lights;
 
     Environment();
 };

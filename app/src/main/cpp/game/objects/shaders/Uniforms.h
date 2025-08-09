@@ -4,6 +4,8 @@
 
 #pragma once
 #include <GLES3/gl3.h>
+#include <string>
+#include <vector>
 
 struct CameraUniforms {
     int u_ratio = -1;
@@ -32,23 +34,28 @@ struct LightUniforms {
     int u_light_quadratic = -1;
 
 public:
-    void init(unsigned int program) {
-        u_ambient_amount = glGetUniformLocation(program, "u_light.ambient_amount");
-        u_light_position = glGetUniformLocation(program, "u_light.position");
-        u_light_color = glGetUniformLocation(program, "u_light.color");
-        u_light_intensity = glGetUniformLocation(program, "u_light.intensity");
-        u_light_constant = glGetUniformLocation(program, "u_light.constant");
-        u_light_linear = glGetUniformLocation(program, "u_light.linear");
-        u_light_quadratic = glGetUniformLocation(program, "u_light.quadratic");
+    void init(unsigned int program, int lightIndex) {
+        u_ambient_amount = glGetUniformLocation(program, ("u_light[" + std::to_string(lightIndex) + "].ambient_amount").c_str());
+        u_light_position = glGetUniformLocation(program, ("u_light[" + std::to_string(lightIndex) + "].position").c_str());
+        u_light_color = glGetUniformLocation(program, ("u_light[" + std::to_string(lightIndex) + "].color").c_str());
+        u_light_intensity = glGetUniformLocation(program, ("u_light[" + std::to_string(lightIndex) + "].intensity").c_str());
+        u_light_constant = glGetUniformLocation(program, ("u_light[" + std::to_string(lightIndex) + "].constant").c_str());
+        u_light_linear = glGetUniformLocation(program, ("u_light[" + std::to_string(lightIndex) + "].linear").c_str());
+        u_light_quadratic = glGetUniformLocation(program, ("u_light[" + std::to_string(lightIndex) + "].quadratic").c_str());
     }
 };
 
 struct CommonUniforms {
     CameraUniforms camera;
-    LightUniforms light;
+    std::vector<LightUniforms> light;
+    int number_of_lights = -1;
 public:
-    void init(unsigned int program) {
-        light.init(program);
+    void init(unsigned int program, int lightCount = 0) {
+        light = std::vector<LightUniforms>(lightCount);
+        for (int i = 0; i < light.size(); i++) {
+            light[i].init(program, i);
+        }
+        number_of_lights = glGetUniformLocation(program, "u_number_of_lights");
         camera.init(program);
     }
 };

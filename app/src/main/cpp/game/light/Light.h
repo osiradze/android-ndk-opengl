@@ -7,6 +7,7 @@
 #include "glm/vec3.hpp"
 #include "../objects/shaders/Uniforms.h"
 #include "Attenuation.h"
+#include <vector>
 
 class Light {
 public:
