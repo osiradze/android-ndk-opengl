@@ -7,7 +7,6 @@
 class GameObject {
     public:
         virtual void init() {};
-        virtual void resize(int width, int height) {};
         virtual void onDraw() {};
         virtual void destroy() {};
 };

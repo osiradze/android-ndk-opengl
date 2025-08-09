@@ -2,7 +2,6 @@
 // Created by OSiradze on 13.07.25.
 //
 #include "GameRenderer.h"
-#include "objects/GLObjectImpl.cpp"
 #include "light/Light.h"
 #include <glm/glm.hpp>
 
@@ -28,11 +27,6 @@ void GameRenderer::onDrawFrame() {
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
     env.camera.setRatio(static_cast<float>(width) / static_cast<float>(height));
-    for (GameObject* obj : gameObjects) {
-        if (obj) {
-            obj->resize(width, height);
-        }
-    }
 }
 
 void GameRenderer::onDestroy() {
