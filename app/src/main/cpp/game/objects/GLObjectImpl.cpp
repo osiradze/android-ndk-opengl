@@ -136,7 +136,7 @@ private:
     }
 
     void initUniforms() {
-        shaderProgram.uniforms.init(shaderProgram.id, 2);
+        shaderProgram.uniforms.init(shaderProgram.id, env->lights.size());
         stencilProgram.uniforms.init(stencilProgram.id);
         setRatio(1.0f);
     }

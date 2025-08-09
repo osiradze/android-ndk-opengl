@@ -19,9 +19,9 @@ Environment::Environment():
             Light(
                     glm::vec3(1.5f, 1.5f, 1.5f),
                     glm::vec3(0.0f, 0.0f, 1.0f),
-                    2.0f,
+                    4.0f,
                     0.2f,
-                    20.0f
+                    40.0f
             ),
             Light(
                     glm::vec3(-1.5f, 1.5f, -1.5f),
@@ -29,7 +29,7 @@ Environment::Environment():
                     2.0f,
                     0.2f,
                     20.0f
-            )
+            ),
     })
 {}
 

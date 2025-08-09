@@ -43,7 +43,6 @@ void main() {
         float attenuation = 1.0 / (u_light[i].constant + u_light[i].linear * distance  + u_light[i].quadratic * (distance * distance));
 
         result += ((u_light[i].ambient_amount + diffuse + specularColor) * color.rgb) * attenuation;
-        //result += vec3(u_light[i].ambient_amount);
 
     }
 
