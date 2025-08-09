@@ -6,34 +6,39 @@ in vec2 v_texture_coord;
 in vec3 v_normal;
 in vec3 v_pos;
 
-uniform int u_time;
 uniform sampler2D u_texture;
 uniform sampler2D u_texture_specular;
 
-uniform float u_ambient_amount;
-uniform vec3 u_light_position;
-uniform vec3 u_light_color;
-uniform float u_light_intensity;
+struct Light {
+    float ambient_amount;
+    vec3 position;
+    vec3 color;
+    float intensity;
 
+    float constant;
+    float linear;
+    float quadratic;
+};
+
+uniform Light u_light;
 in vec3 v_view_direction;
-
-
 out vec4 FragColor;
 
 void main() {
     vec4 color = texture(u_texture, v_texture_coord);
-    if(color.a < 0.1) {
-        discard;
-    }
-    vec3 lightDirection = normalize(u_light_position - v_pos);
-    float lightIntensity = max(dot(v_normal, lightDirection), 0.0) * u_light_intensity;
-    vec3 diffuse = lightIntensity * u_light_color;
+    if(color.a < 0.1) {discard;}
+    vec3 lightDirection = normalize(u_light.position - v_pos);
+    float lightIntensity = max(dot(v_normal, lightDirection), 0.0) * u_light.intensity;
+    vec3 diffuse = lightIntensity * u_light.color;
 
     vec3 reflectedLightDirection = reflect(-lightDirection, v_normal);
     float specularColorIntensity = pow(max(dot(reflectedLightDirection, v_view_direction), 0.0), 32.0);
     vec3 specularColor = vec3(texture(u_texture_specular, v_texture_coord)) * specularColorIntensity;
 
-    vec3 result = ((u_ambient_amount + diffuse + specularColor) * color.rgb);
+    float distance = length(u_light.position - v_pos);
+    float attenuation = 1.0 / (u_light.constant + u_light.linear * distance  + u_light.quadratic * (distance * distance));
+
+    vec3 result = ((u_light.ambient_amount + diffuse + specularColor) * color.rgb) * attenuation;
 
     FragColor = vec4(result, 1.0);
 }

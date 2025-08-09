@@ -148,8 +148,8 @@ private:
 
     void setRatio(float ratio) {
         glUseProgram(shaderProgram.id);
-        glUniform1f(shaderProgram.uniforms.u_ratio, ratio);
-        glUniform1f(stencilProgram.uniforms.u_ratio, ratio);
+        glUniform1f(shaderProgram.uniforms.camera.u_ratio, ratio);
+        glUniform1f(stencilProgram.uniforms.camera.u_ratio, ratio);
         glUseProgram(0);
     }
 
@@ -164,18 +164,16 @@ private:
     }
 
     void updateUniforms(Program &program) {
-        glUniformMatrix4fv(program.uniforms.u_model, 1, GL_FALSE, &data->getTranslation()->getModel()[0][0]);
-        env->camera.setUniform(program.uniforms.u_view, program.uniforms.u_projection, program.uniforms.u_camera_position);
-        env->light.setUniforms(program.uniforms.u_light_position, program.uniforms.u_light_color,
-                               program.uniforms.u_light_intensity, program.uniforms.u_ambient_amount);
+        glUniformMatrix4fv(program.uniforms.camera.u_model, 1, GL_FALSE, &data->getTranslation()->getModel()[0][0]);
+        env->camera.setUniform(program.uniforms.camera);
+        env->light.setUniforms(program.uniforms.light);
     }
 
     void setUpDrawStencil() const {
         if (!outline) return;
         glStencilFunc(GL_ALWAYS, 1, 0xFF); // draw object fully in stencil buffer
         glStencilMask(0xFF); // enable writing to the stencil buffer
-        glStencilOp(GL_KEEP, GL_KEEP,
-                    GL_REPLACE); // replace stencil then depth and stencil test passes
+        glStencilOp(GL_KEEP, GL_KEEP,GL_REPLACE); // replace stencil then depth and stencil test passes
     }
 
     void drawOutLine() {

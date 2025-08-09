@@ -5,6 +5,7 @@
 #pragma once
 
 #include <glm/mat4x4.hpp> // mat4
+#include "../objects/shaders/Uniforms.h"
 
 class Camera {
 
@@ -17,7 +18,7 @@ public:
     void setRatio(float ratio);
     void rotate(float angle, glm::vec3 vector);
 
-    void setUniform(unsigned int view, unsigned int projection, unsigned int cameraPosition);
+    void setUniform(CameraUniforms &uniforms);
 
 private:
     glm::vec3 eye, center, up;

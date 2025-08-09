@@ -41,6 +41,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/utils/MathUtils.cpp
         game/camera/Camera.cpp
         game/light/Light.cpp
+        game/light/Attenuation.cpp
         game/environment/Environment.cpp
 )
 

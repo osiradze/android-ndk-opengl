@@ -17,11 +17,12 @@ Environment::Environment():
             ),
     light(
             Light(
-        glm::vec3(1.5f, 1.5f, 1.5f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-        1.0f,
-        0.3f
-        )
+                glm::vec3(1.5f, 1.5f, 1.5f),
+                glm::vec3(1.0f, 1.0f, 1.0f),
+                2.0f,
+                0.2f,
+                20.0f
+            )
     )
 {}
 

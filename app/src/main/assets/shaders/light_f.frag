@@ -1,10 +1,13 @@
 #version 300 es
 precision mediump float;
 
-uniform vec3 u_light_color;
+struct Light {
+    vec3 color;
+};
+uniform Light u_light;
 
 out vec4 FragColor;
 
 void main() {
-    FragColor = vec4(u_light_color, 1.0);
+    FragColor = vec4(u_light.color, 1.0);
 }
