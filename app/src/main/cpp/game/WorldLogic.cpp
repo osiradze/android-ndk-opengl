@@ -16,44 +16,45 @@
 
 void GameRenderer::initObject(){
     ShadersPaths objectShader {"shaders/object_v.vert", "shaders/object_f.frag" };
+    ShadersPaths lightShaders { "shaders/object_v.vert", "shaders/light_f.frag" };
+
+    Texture cubeTexture {"textures/cube_diffuse.png", "textures/cube_specular.png"};
+    Texture floorTexture {"textures/floor_diffuse.png", "textures/floor_specular.png"};
+
+
     lantern = ObjectLoader::loadObject("models/lantern.obj");
     lantern->getTranslation()-> setScale(glm::vec3(5.f));
     lantern->getTranslation()-> setPosition(glm::vec3(0.0f, -0.1f, 0.0f));
     Texture lanternTexture{"textures/lantern_diffuse.png", "textures/lantern_specular.png"};
     gameObjects.push_back(std::make_unique<GLObject>(&env, lantern.get(), objectShader, lanternTexture));
 
+    cube1->getTranslation()->setPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
+    cube1->getTranslation()->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
+    gameObjects.push_back(std::make_unique<GLObject>(&env, cube1.get(), objectShader, cubeTexture));
 
-    Texture cubeTexture {"textures/cube_diffuse.png", "textures/cube_specular.png"};
-
-    cube1.data.getTranslation()->setPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
-    cube1.data.getTranslation()->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-    gameObjects.push_back(std::make_unique<GLObject>(&env, &(cube1.data), objectShader, cubeTexture));
-
-    cube2.data.getTranslation()->setPosition(glm::vec3(1.0f, 0.0f, 0.0f));
-    cube2.data.getTranslation()->setRotation(glm::vec3(0.0f, 45.0f, 0.0f));
-    gameObjects.push_back(std::make_unique<GLObject>(&env, &(cube2.data), objectShader, cubeTexture));
+    cube2->getTranslation()->setPosition(glm::vec3(1.0f, 0.0f, 0.0f));
+    cube2->getTranslation()->setRotation(glm::vec3(0.0f, 45.0f, 0.0f));
+    gameObjects.push_back(std::make_unique<GLObject>(&env, cube2.get(), objectShader, cubeTexture));
 
 
-    ShadersPaths lightShaders { "shaders/object_v.vert", "shaders/light_f.frag" };
-    lightCube1.data.getTranslation()->setPosition(env.lights[0].light_position);
-    lightCube1.data.getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
-    gameObjects.push_back(std::make_unique<GLObject>(&env, &(lightCube1.data), lightShaders, std::nullopt));
+    lightCube1->getTranslation()->setPosition(env.lights[0].light_position);
+    lightCube1->getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
+    gameObjects.push_back(std::make_unique<GLObject>(&env, lightCube1.get(), lightShaders, std::nullopt));
 
-    lightCube2.data.getTranslation()->setPosition(env.lights[1].light_position);
-    lightCube2.data.getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
-    gameObjects.push_back(std::make_unique<GLObject>(&env, &(lightCube2.data), lightShaders, std::nullopt));
+    lightCube2->getTranslation()->setPosition(env.lights[1].light_position);
+    lightCube2->getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
+    gameObjects.push_back(std::make_unique<GLObject>(&env, lightCube2.get(), lightShaders, std::nullopt));
 
-    Texture floorTexture {"textures/floor_diffuse.png", "textures/floor_specular.png"};
-    floor.data.getTranslation()->setPosition(glm::vec3(0.0f, -0.5f, 1.0f));
-    floor.data.getTranslation()->setScale(glm::vec3(7.0));
-    gameObjects.push_back(std::make_unique<GLObject>(&env, &(floor.data), objectShader, floorTexture));
+    floor->getTranslation()->setPosition(glm::vec3(0.0f, -0.5f, 1.0f));
+    floor->getTranslation()->setScale(glm::vec3(7.0));
+    gameObjects.push_back(std::make_unique<GLObject>(&env, floor.get(), objectShader, floorTexture));
 }
 
 void GameRenderer::updateObjects() {
     for(auto &light : env.lights) {
         light.rotate(60, glm::vec3(0.0f, 1.0f, 0.0f));
     }
-    lightCube1.data.getTranslation()->setPosition(env.lights[0].light_position);
-    lightCube2.data.getTranslation()->setPosition(env.lights[1].light_position);
+    lightCube1->getTranslation()->setPosition(env.lights[0].light_position);
+    lightCube2->getTranslation()->setPosition(env.lights[1].light_position);
 //    env.lights.light_color = MathUtils::rotate(env.lights.light_color, 1.0, glm::vec3(0.0f, 1.0f, 0.0f));
 }

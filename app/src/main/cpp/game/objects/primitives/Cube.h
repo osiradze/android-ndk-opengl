@@ -8,8 +8,8 @@
 
 class Cube {
 private:
-    static const int dataCount = 264;
-    float* cubeVertexData = new float[dataCount] {
+    int dataCount = 264;
+    float* vertexData = new float[dataCount] {
             // Back face (z = -0.5) - Normal: (0, 0, -1)
             -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // bottom-left
             0.5f, -0.5f, -0.5f, 0.0f, 0.0f, -1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f,  // bottom-right
@@ -63,10 +63,13 @@ private:
             20, 21, 22, 22, 23, 20
     };
 public:
-    GLObjectData data = GLObjectData(
-            11,  // number of floats per vertex
-            dataCount,
-            std::unique_ptr<float[]>(cubeVertexData),
-            indicesDataCount,
-            std::unique_ptr<unsigned int[]>(indices));
+    std::unique_ptr<GLObjectData> getData() {
+        return std::make_unique<GLObjectData>(
+                11,  // floats per vertex
+                dataCount,
+                std::unique_ptr<float[]>(vertexData),
+                indicesDataCount,
+                std::unique_ptr<unsigned int[]>(indices)
+        );
+    }
 };

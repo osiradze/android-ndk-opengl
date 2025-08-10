@@ -13,6 +13,11 @@ void GameRenderer::onSurfaceCreated() {
             obj->init();
         }
     }
+    for(auto &data : allData) {
+        if (data) {
+            data->freeVertexDataFromMemory();
+        }
+    }
 }
 
 void GameRenderer::onDrawFrame() {

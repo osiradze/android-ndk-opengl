@@ -24,19 +24,21 @@ public:
     void onDestroy();
 
 private:
-    Plane floor = Plane();
-    Cube cube1 = Cube();
-    Cube cube2 = Cube();
+    std::unique_ptr<GLObjectData> floor = Plane().getData();
+    std::unique_ptr<GLObjectData> cube1 = Cube().getData();
+    std::unique_ptr<GLObjectData> cube2 = Cube().getData();
+
+    std::unique_ptr<GLObjectData> lightCube1 = Cube().getData();
+    std::unique_ptr<GLObjectData> lightCube2 = Cube().getData();
 
     std::unique_ptr<GLObjectData> lantern;
 
-    Cube lightCube1 = Cube();
-    Cube lightCube2 = Cube();
-
-    glm::mat4 lightScaleModel = glm::mat4(1.0f);
-
     Environment env = Environment();
     std::vector<std::unique_ptr<GameObject>> gameObjects;
+
+    std::vector<GLObjectData*> allData {
+            floor.get(), cube1.get(), cube2.get(), lightCube1.get(), lightCube2.get()
+    };
 
     void initObject();
     void updateObjects();

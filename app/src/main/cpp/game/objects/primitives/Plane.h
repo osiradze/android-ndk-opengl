@@ -7,8 +7,9 @@
 
 class Plane {
 private:
-    static const int dataCount = 44;
-    float* planeVertexData = new float[dataCount] {
+    int floatsPerVertex = 11;
+    int dataCount = 44;
+    float* vertexData = new float[dataCount] {
             -0.5f, 0.0f, -0.5f,   0.0f, 1.0f, 0.0f,   0.0f, 0.0f,   1.0f, 1.0f, 1.0f, // bottom-left
             0.5f, 0.0f, -0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   1.0f, 1.0f, 1.0f, // bottom-right
             0.5f, 0.0f,  0.5f,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f,   1.0f, 1.0f, 1.0f, // top-right
@@ -22,11 +23,14 @@ private:
     };
 
 public:
-    GLObjectData data = GLObjectData(
-            11,  // floats per vertex
-            dataCount,
-            std::unique_ptr<float[]>(planeVertexData),
-            indicesDataCount,
-            std::unique_ptr<unsigned int[]>(indices)
-    );
+    std::unique_ptr<GLObjectData> getData() {
+        return std::make_unique<GLObjectData>(
+                Plane::floatsPerVertex,  // floats per vertex
+                Plane::dataCount,
+                std::unique_ptr<float[]>(vertexData),
+                Plane::indicesDataCount,
+                std::unique_ptr<unsigned int[]>(indices)
+        );
+    }
+
 };

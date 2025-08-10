@@ -33,7 +33,6 @@ void GLObject::init() {
 }
 
 void GLObject::onDraw() {
-    if (!data || !data->vertexData || !data->indices) return;
     glUseProgram(shaderProgram.id);
     glBindVertexArray(vao);
     updateUniforms(shaderProgram);

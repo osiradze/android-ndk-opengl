@@ -39,4 +39,10 @@ public:
         return &translation;
     }
 
+    //clear memory after transferring data to GPU
+    void freeVertexDataFromMemory() {
+        vertexData.reset();
+        indices.reset();
+    }
+
 };
