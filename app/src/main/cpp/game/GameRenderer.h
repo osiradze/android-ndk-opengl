@@ -36,7 +36,7 @@ private:
     glm::mat4 lightScaleModel = glm::mat4(1.0f);
 
     Environment env = Environment();
-    std::array<GameObject*, 6> gameObjects {};
+    std::vector<std::unique_ptr<GameObject>> gameObjects;
 
     void initObject();
     void updateObjects();

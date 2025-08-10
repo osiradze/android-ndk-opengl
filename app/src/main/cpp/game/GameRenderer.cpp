@@ -8,7 +8,7 @@
 void GameRenderer::onSurfaceCreated() {
     initGLConfig();
     initObject();
-    for (GameObject* obj : gameObjects) {
+    for (auto &obj : gameObjects) {
         if (obj) {
             obj->init();
         }
@@ -18,7 +18,7 @@ void GameRenderer::onSurfaceCreated() {
 void GameRenderer::onDrawFrame() {
     clearBuffers();
     updateObjects();
-    for (GameObject* obj : gameObjects) {
+    for (auto &obj : gameObjects) {
         if (obj) {
             obj->onDraw();
         }
@@ -30,10 +30,9 @@ void GameRenderer::onSurfaceChanged(int width, int height) {
 }
 
 void GameRenderer::onDestroy() {
-    for (GameObject* obj : gameObjects) {
+    for (auto &obj : gameObjects) {
         if (obj) {
             obj->destroy();
-            delete obj;
         }
     }
 }
