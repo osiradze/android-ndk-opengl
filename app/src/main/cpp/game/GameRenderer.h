@@ -8,6 +8,7 @@
 #include "environment/Environment.h"
 #include "objects/primitives//Cube.h"
 #include "objects/primitives/Plane.h"
+#include "screen/Screen.h"
 #include <array>
 
 class GameRenderer {
@@ -24,6 +25,8 @@ public:
     void onDestroy();
 
 private:
+    std::unique_ptr<Screen> screen;
+
     std::unique_ptr<GLObjectData> floor = Plane().getData();
     std::unique_ptr<GLObjectData> cube1 = Cube().getData();
     std::unique_ptr<GLObjectData> cube2 = Cube().getData();

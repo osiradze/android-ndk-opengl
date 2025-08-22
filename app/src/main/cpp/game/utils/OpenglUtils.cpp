@@ -74,8 +74,8 @@ void OpenglUtils::loadTexture(const char *assetPath) {
     if (data) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-    }else {
+        stbi_image_free(data);
+    } else {
         __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "Failed to load texture");
     }
-    stbi_image_free(data);
 }

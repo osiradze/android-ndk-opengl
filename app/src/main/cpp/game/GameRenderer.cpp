@@ -8,6 +8,7 @@
 void GameRenderer::onSurfaceCreated() {
     initGLConfig();
     initObject();
+
     for (auto &obj : gameObjects) {
         if (obj) {
             obj->init();
@@ -21,6 +22,7 @@ void GameRenderer::onSurfaceCreated() {
 }
 
 void GameRenderer::onDrawFrame() {
+    //screen->bind();
     clearBuffers();
     updateObjects();
     for (auto &obj : gameObjects) {
@@ -31,6 +33,7 @@ void GameRenderer::onDrawFrame() {
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
+    screen = std::make_unique<Screen>(width, height);
     env.camera.setRatio(static_cast<float>(width) / static_cast<float>(height));
 }
 

@@ -9,7 +9,10 @@
 #include "Translation.h"
 
 struct GLObjectData {
-    unsigned int numberOfFloatsPerVertex;
+    unsigned int stride;
+    unsigned int vertexDataSize;
+    unsigned int indicesSize;
+    unsigned int indicesCount;
     std::unique_ptr<float[]> vertexData;
     std::unique_ptr<unsigned int[]> indices;
 
@@ -20,20 +23,16 @@ struct GLObjectData {
             int indicesCount = 0,
             std::unique_ptr<unsigned int[]> indices = nullptr
     ):
-    numberOfFloatsPerVertex(numberOfFloatsPerVertex),
+    stride(numberOfFloatsPerVertex * sizeof(float)),
     vertexDataSize(vertexDataCount * sizeof(float)),
-    vertexData(std::move(vertexData)),
-    indicesCount(indicesCount),
     indicesSize(indicesCount * sizeof(unsigned int)),
+    indicesCount(indicesCount),
+    vertexData(std::move(vertexData)),
     indices(std::move(indices)) {}
 private:
     Translation translation = Translation();
 
 public:
-    unsigned int stride = numberOfFloatsPerVertex * sizeof(float);
-    unsigned int vertexDataSize;
-    unsigned int indicesSize;
-    unsigned int indicesCount;
 
     Translation* getTranslation() {
         return &translation;
