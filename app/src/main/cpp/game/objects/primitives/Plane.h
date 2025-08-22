@@ -18,8 +18,8 @@ private:
 
     int indicesDataCount = 6;
     unsigned int* indices = new unsigned int[indicesDataCount] {
-            0, 1, 2,
-            2, 3, 0
+            0, 2, 1,    // Counter-clockwise: bottom-left → top-right → bottom-right
+            0, 3, 2     // Counter-clockwise: bottom-left → top-left → top-right
     };
 
 public:
