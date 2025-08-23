@@ -29,12 +29,22 @@ void Camera::rotate(float angle, glm::vec3 vector) {
     view = glm::lookAt(eye, center, up);
 }
 
+
+
 void Camera::setUniform(
         CameraUniforms &uniforms
 ) {
     glUniformMatrix4fv(uniforms.u_view, 1, GL_FALSE, &view[0][0]);
     glUniformMatrix4fv(uniforms.u_projection, 1, GL_FALSE, &projection[0][0]);
     glUniform3f(uniforms.u_camera_position, eye.x, eye.y, eye.z);
+}
+
+void Camera::zoom(float delta) {
+    float distance = glm::length(eye - center);
+    distance += delta;
+    glm::vec3 direction = glm::normalize(eye - center);
+    eye = center + direction * distance;
+    view = glm::lookAt(eye, center, up);
 }
 
 

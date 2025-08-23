@@ -21,7 +21,6 @@ void GameRenderer::initObject(){
     Texture cubeTexture {"textures/cube_diffuse.png", "textures/cube_specular.png"};
     Texture floorTexture {"textures/floor_diffuse.png", "textures/floor_specular.png"};
 
-
     lantern = ObjectLoader::loadObject("models/lantern.obj");
     lantern->getTranslation()-> setScale(glm::vec3(5.f));
     lantern->getTranslation()-> setPosition(glm::vec3(0.0f, -0.1f, 0.0f));

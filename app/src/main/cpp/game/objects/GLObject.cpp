@@ -11,6 +11,7 @@
 #include "../environment/Environment.h"
 #include <array>
 #include <utility>
+#include <android/log.h>
 
 #include "glm/mat4x4.hpp" // glm::mat4
 #include "glm/ext/matrix_transform.hpp"
@@ -45,6 +46,8 @@ void GLObject::onDraw() {
 }
 
 void GLObject::destroy() {
+    glBindVertexArray(0);
+    glUseProgram(0);
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
@@ -84,6 +87,11 @@ void GLObject::initData() {
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    auto chk = [](const char* where){
+        GLenum e = glGetError();
+        if (e != GL_NO_ERROR) __android_log_print(ANDROID_LOG_ERROR,"GL", "%s: glError 0x%x", where, e);
+    };
 }
 
 void GLObject::initTexture() {

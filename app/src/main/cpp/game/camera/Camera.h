@@ -17,6 +17,7 @@ public:
     Camera(glm::vec3 eye, glm::vec3 center, glm::vec3 up, float fov, float ratio, float nearPlane, float farPlane);
     void setRatio(float ratio);
     void rotate(float angle, glm::vec3 vector);
+    void zoom(float delta);
 
     void setUniform(CameraUniforms &uniforms);
 

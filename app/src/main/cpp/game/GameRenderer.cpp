@@ -47,5 +47,5 @@ void GameRenderer::onDestroy() {
 
 void GameRenderer::onDrag(float x, float y) {
     env.camera.rotate(-0.1f * x, glm::vec3(0.0f, 1.0f, 0.0f));
-    env.camera.rotate(-0.1f * y, glm::vec3(1.0f, 0.0f, 0.0f));
+    env.camera.zoom(0.01f * y);
 }

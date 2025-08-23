@@ -5,11 +5,12 @@
 #include <jni.h>
 #include "game/GameRenderer.h"
 
-auto gameRenderer = std::make_unique<GameRenderer>();
+std::unique_ptr<GameRenderer> gameRenderer;
 
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_siradze_workingwithc_GameRenderer_onSurfaceCreatedBridge(JNIEnv *env, jobject thiz) {
+    gameRenderer = std::make_unique<GameRenderer>();
     gameRenderer->onSurfaceCreated();
 }
 extern "C"
