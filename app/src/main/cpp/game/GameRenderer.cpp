@@ -22,7 +22,7 @@ void GameRenderer::onSurfaceCreated() {
 }
 
 void GameRenderer::onDrawFrame() {
-    //screen->bind();
+    screen->bind();
     clearBuffers();
     updateObjects();
     for (auto &obj : gameObjects) {
@@ -30,6 +30,7 @@ void GameRenderer::onDrawFrame() {
             obj->onDraw();
         }
     }
+    screen->draw();
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
@@ -43,6 +44,7 @@ void GameRenderer::onDestroy() {
             obj->destroy();
         }
     }
+    screen->destroy();
 }
 
 void GameRenderer::onDrag(float x, float y) {

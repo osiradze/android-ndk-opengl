@@ -87,11 +87,6 @@ void GLObject::initData() {
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-    auto chk = [](const char* where){
-        GLenum e = glGetError();
-        if (e != GL_NO_ERROR) __android_log_print(ANDROID_LOG_ERROR,"GL", "%s: glError 0x%x", where, e);
-    };
 }
 
 void GLObject::initTexture() {
