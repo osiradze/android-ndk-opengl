@@ -22,19 +22,32 @@ void GameRenderer::onSurfaceCreated() {
 }
 
 void GameRenderer::onDrawFrame() {
-    screen->bind();
-    clearBuffers();
     updateObjects();
+
+    screen->bind();
+    drawObjects();
+    screen->draw();
+
+    //colorIdScreen->bind();
+    //env.colorIdMode = true;
+    //drawObjects();
+    //env.colorIdMode = false;
+    //colorIdScreen->draw();
+}
+
+void GameRenderer::drawObjects() {
+    clearBuffers();
     for (auto &obj : gameObjects) {
         if (obj) {
             obj->onDraw();
         }
     }
-    screen->draw();
 }
+
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
     screen = std::make_unique<Screen>(width, height);
+    colorIdScreen = std::make_unique<Screen>(width, height);
     env.camera.setRatio(static_cast<float>(width) / static_cast<float>(height));
 }
 

@@ -28,15 +28,20 @@ void GLObject::init() {
     OpenglUtils::createProgram(stencilProgram.id, shaders.vertexShader.c_str(),
                                shaders.stencilFragmentShader.c_str());
 
+    OpenglUtils::createProgram(colorIdProgram.id, shaders.vertexShader.c_str(),
+                               shaders.colorIdFragmentShader.c_str());
+
+
     initUniforms();
     initData();
     initTexture();
 }
 
 void GLObject::onDraw() {
-    glUseProgram(shaderProgram.id);
+    Program &programToUse = env->colorIdMode ? colorIdProgram : shaderProgram;
+    glUseProgram(programToUse.id);
     glBindVertexArray(vao);
-    updateUniforms(shaderProgram);
+    updateUniforms(programToUse);
     activateTextures();
     setUpDrawStencil();
     glDrawElements(GL_TRIANGLES, data->indicesCount, GL_UNSIGNED_INT, nullptr);
@@ -132,17 +137,19 @@ void GLObject::updateUniforms(Program &program) {
     for (int i = 0; i < program.uniforms.light.size(); i++) {
         env->lights[i].setUniforms(program.uniforms.light[i]);
     }
+    glUniform3f(program.uniforms.u_color_id, 1.0, 1.0, 1.0);
+
 }
 
 void GLObject::setUpDrawStencil() const {
-    if (!outline) return;
+    if (!outline || env->colorIdMode) return;
     glStencilFunc(GL_ALWAYS, 1, 0xFF); // draw object fully in stencil buffer
     glStencilMask(0xFF); // enable writing to the stencil buffer
     glStencilOp(GL_KEEP, GL_KEEP,GL_REPLACE); // replace stencil then depth and stencil test passes
 }
 
 void GLObject::drawOutLine() {
-    if (!outline) return;
+    if (!outline || env->colorIdMode) return;
     glStencilMask(0x00); // don't write in stencil buffer
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // draw only where stencil is not equal to 1
 

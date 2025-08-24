@@ -25,7 +25,10 @@ public:
     void onDestroy();
 
 private:
+    // for rendering to texture
     std::unique_ptr<Screen> screen;
+    // for color id picking
+    std::unique_ptr<Screen> colorIdScreen;
 
     std::unique_ptr<GLObjectData> floor = Plane().getData();
     std::unique_ptr<GLObjectData> cube1 = Cube().getData();
@@ -45,6 +48,7 @@ private:
 
     void initObject();
     void updateObjects();
+    void drawObjects();
 
     static void initGLConfig();
     static void clearBuffers();

@@ -12,6 +12,7 @@ class Environment {
 public:
     Camera camera;
     std::vector<Light> lights;
+    bool colorIdMode = false;
 
     Environment();
 };

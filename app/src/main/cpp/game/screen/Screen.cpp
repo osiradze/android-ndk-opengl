@@ -80,3 +80,9 @@ Screen::~Screen() {
     glDeleteRenderbuffers(1, &rbo);
 }
 
+void Screen::getPixel(int x, int y, uint8_t *out) {
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, out);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+

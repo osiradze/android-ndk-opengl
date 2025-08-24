@@ -38,6 +38,7 @@ private:
 
     Program shaderProgram;
     Program stencilProgram;
+    Program colorIdProgram;
 
     unsigned int vao = 0;
     unsigned int vbo = 0;
