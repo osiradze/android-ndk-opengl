@@ -93,6 +93,7 @@ std::unique_ptr<GLObjectData> ObjectLoader::loadObject(
     auto indexCopy = std::make_unique<unsigned int[]>(indicesVector.size());
     std::copy(indicesVector.begin(), indicesVector.end(), indexCopy.get());
     return std::make_unique<GLObjectData>(
+            objectPath, // Object name
             numberOfFloatsPerVertex,
             vertexDataVector.size(), // Vertex count
               std::move(vertexCopy), // Vertex data

@@ -7,16 +7,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "glm/glm.hpp"
 #include "Translation.h"
+#include <random>
+#include <utility>
 
 struct GLObjectData {
+
     unsigned int stride;
     unsigned int vertexDataSize;
     unsigned int indicesSize;
     unsigned int indicesCount;
     std::unique_ptr<float[]> vertexData;
     std::unique_ptr<unsigned int[]> indices;
+    std::string name;
 
     GLObjectData(
+            std::string name,
             int numberOfFloatsPerVertex,
             int vertexDataCount,
             std::unique_ptr<float[]> vertexData = nullptr,
@@ -28,11 +33,19 @@ struct GLObjectData {
     indicesSize(indicesCount * sizeof(unsigned int)),
     indicesCount(indicesCount),
     vertexData(std::move(vertexData)),
-    indices(std::move(indices)) {}
+    indices(std::move(indices)),
+    name(std::move(name)){}
 private:
     Translation translation = Translation();
 
+    static float randomFloat() {
+        return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    }
+
 public:
+
+    bool outline = false;
+    float colorId[3] = {randomFloat(), randomFloat(), randomFloat()}; // default white color id
 
     Translation* getTranslation() {
         return &translation;

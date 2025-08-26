@@ -15,3 +15,9 @@ glm::vec3 MathUtils::rotate(glm::vec3 vector, float degree, glm::vec3 axis) {
     return glm::rotate(vector, radians, normalizedAxis);
 }
 
+
+bool MathUtils::areEqual(float a, float b, float epsilon) {
+    return std::fabs(a - b) < epsilon;
+}
+
+

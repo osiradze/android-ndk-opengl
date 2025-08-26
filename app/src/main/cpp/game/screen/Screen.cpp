@@ -72,17 +72,27 @@ void Screen::destroy() {
     glDeleteProgram(shaderProgram);
 }
 
-
-
 Screen::~Screen() {
     glDeleteFramebuffers(1, &fbo);
     glDeleteTextures(1, &texture);
     glDeleteRenderbuffers(1, &rbo);
 }
 
-void Screen::getPixel(int x, int y, uint8_t *out) {
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glReadPixels(x, y, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, out);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+glm::vec4 Screen::getPixel(int x, int y) {
+    // OpenGL origin is bottom-left; if your coords are top-left, flip y:
+    int yf = this->height - y;
+
+    // Avoid row padding surprises
+    glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+    GLubyte rgba[4] = {0,0,0,0};
+    glReadPixels(x, yf, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
+
+    return glm::vec4(
+            rgba[0] / 255.0f,
+            rgba[1] / 255.0f,
+            rgba[2] / 255.0f,
+            rgba[3] / 255.0f
+    );
 }
 

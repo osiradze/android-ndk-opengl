@@ -25,6 +25,7 @@ private:
 public:
     std::unique_ptr<GLObjectData> getData() {
         return std::make_unique<GLObjectData>(
+                "Plane",
                 Plane::floatsPerVertex,  // floats per vertex
                 Plane::dataCount,
                 std::unique_ptr<float[]>(vertexData),

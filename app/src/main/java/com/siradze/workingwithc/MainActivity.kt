@@ -3,12 +3,7 @@ package com.siradze.workingwithc
 import android.content.res.AssetManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.TextView
-import androidx.core.graphics.drawable.toBitmap
 import com.siradze.workingwithc.databinding.ActivityMainBinding
-import kotlin.random.Random
-import kotlin.time.measureTime
 
 class MainActivity : AppCompatActivity() {
 

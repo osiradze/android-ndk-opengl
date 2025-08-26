@@ -31,6 +31,7 @@ class GameView(context: Context, attrs: AttributeSet) : GLSurfaceView(context) {
                 MotionEvent.ACTION_DOWN -> {
                     lastX = event.rawX
                     lastY = event.rawY
+                    gameRenderer.onTouchDownBridge(event.x.toInt(), event.y.toInt())
                     true
                 }
 

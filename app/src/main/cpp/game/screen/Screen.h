@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include "glm/vec4.hpp"
 
 /**
  * Screen class create FrameBuffer and RenderBuffer, it saves screen texture
@@ -15,7 +16,8 @@ public:
     Screen(int width, int height);
     void bind() const;
     void draw() const;
-    void getPixel(int x, int y, uint8_t out[4]);
+    //void getPixel(int x, int y, unsigned byte * out) const;
+    glm::vec4 getPixel(int x, int y);
     void destroy();
     ~Screen();
 

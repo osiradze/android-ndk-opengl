@@ -58,6 +58,7 @@ void GLObject::destroy() {
     glDeleteBuffers(1, &ebo);
     glDeleteProgram(shaderProgram.id);
     glDeleteProgram(stencilProgram.id);
+    glDeleteProgram(colorIdProgram.id);
     glDeleteTextures(2, texture);
 }
 
@@ -118,6 +119,7 @@ void GLObject::initTexture() {
 void GLObject::initUniforms() {
     shaderProgram.uniforms.init(shaderProgram.id, env->lights.size());
     stencilProgram.uniforms.init(stencilProgram.id);
+    colorIdProgram.uniforms.init(colorIdProgram.id);
 }
 
 void GLObject::activateTextures() {
@@ -137,19 +139,21 @@ void GLObject::updateUniforms(Program &program) {
     for (int i = 0; i < program.uniforms.light.size(); i++) {
         env->lights[i].setUniforms(program.uniforms.light[i]);
     }
-    glUniform3f(program.uniforms.u_color_id, 1.0, 1.0, 1.0);
+
+    // for color id
+    glUniform3f(program.uniforms.u_color_id, data->colorId[0], data->colorId[1], data->colorId[2]);
 
 }
 
 void GLObject::setUpDrawStencil() const {
-    if (!outline || env->colorIdMode) return;
+    if (!data->outline || env->colorIdMode) return;
     glStencilFunc(GL_ALWAYS, 1, 0xFF); // draw object fully in stencil buffer
     glStencilMask(0xFF); // enable writing to the stencil buffer
     glStencilOp(GL_KEEP, GL_KEEP,GL_REPLACE); // replace stencil then depth and stencil test passes
 }
 
 void GLObject::drawOutLine() {
-    if (!outline || env->colorIdMode) return;
+    if (!data->outline || env->colorIdMode) return;
     glStencilMask(0x00); // don't write in stencil buffer
     glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // draw only where stencil is not equal to 1
 

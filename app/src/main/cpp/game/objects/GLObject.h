@@ -18,14 +18,12 @@ public:
             Environment *env,
             GLObjectData *data,
             ShadersPaths shaders,
-            std::optional<Texture> texturePath,
-            bool outline = false
+            std::optional<Texture> texturePath
     ):
     env(env),
     data(data),
     shaders(std::move(shaders)),
-    texturePath(std::move(texturePath)),
-    outline(outline) {}
+    texturePath(std::move(texturePath)) {}
 
     void init() override;
     void onDraw() override;
@@ -48,8 +46,6 @@ private:
     static const unsigned int numberOfTextures = 2;
     unsigned int texture[numberOfTextures]{};
     int textureLocations[numberOfTextures]{};
-
-    bool outline = false;
 
     void initData();
     void initTexture();

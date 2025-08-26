@@ -70,6 +70,7 @@ private:
 public:
     std::unique_ptr<GLObjectData> getData() {
         return std::make_unique<GLObjectData>(
+                "Cube",
                 11,  // floats per vertex
                 dataCount,
                 std::unique_ptr<float[]>(vertexData),

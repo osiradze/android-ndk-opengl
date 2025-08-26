@@ -30,6 +30,8 @@ class GameRenderer: GLSurfaceView.Renderer {
 
     external fun onDragBridge(x: Float, y: Float)
 
+    external fun onTouchDownBridge(x: Int, y: Int)
+
     private external fun onSurfaceCreatedBridge()
 
     private external fun onDrawFrameBridge()
