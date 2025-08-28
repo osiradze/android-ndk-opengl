@@ -56,5 +56,4 @@ void GameRenderer::updateObjects() {
     }
     lightCube1->getTranslation()->setPosition(env.lights[0].light_position);
     lightCube2->getTranslation()->setPosition(env.lights[1].light_position);
-//    env.lights.light_color = MathUtils::rotate(env.lights.light_color, 1.0, glm::vec3(0.0f, 1.0f, 0.0f));
 }

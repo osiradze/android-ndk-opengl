@@ -1,11 +1,5 @@
 package com.siradze.workingwithc
 
-import android.opengl.GLES20.GL_COLOR_BUFFER_BIT
-import android.opengl.GLES20.GL_DEPTH_BUFFER_BIT
-import android.opengl.GLES20.GL_DEPTH_TEST
-import android.opengl.GLES20.glClear
-import android.opengl.GLES20.glClearColor
-import android.opengl.GLES20.glEnable
 import android.opengl.GLSurfaceView
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10

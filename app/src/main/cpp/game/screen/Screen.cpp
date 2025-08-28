@@ -78,7 +78,7 @@ Screen::~Screen() {
     glDeleteRenderbuffers(1, &rbo);
 }
 
-glm::vec4 Screen::getPixel(int x, int y) {
+glm::vec4 Screen::getPixel(int x, int y) const {
     // OpenGL origin is bottom-left; if your coords are top-left, flip y:
     int yf = this->height - y;
 
@@ -88,11 +88,11 @@ glm::vec4 Screen::getPixel(int x, int y) {
     GLubyte rgba[4] = {0,0,0,0};
     glReadPixels(x, yf, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
 
-    return glm::vec4(
+    return {
             rgba[0] / 255.0f,
             rgba[1] / 255.0f,
             rgba[2] / 255.0f,
             rgba[3] / 255.0f
-    );
+    };
 }
 

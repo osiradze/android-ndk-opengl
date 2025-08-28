@@ -3,7 +3,6 @@
 //
 #include "GameRenderer.h"
 #include "light/Light.h"
-#include "utils/MathUtils.h"
 #include <glm/glm.hpp>
 #include <android/log.h>
 
@@ -33,33 +32,6 @@ void GameRenderer::onDrawFrame() {
     handleColorIdPicking();
 }
 
-void GameRenderer::handleColorIdPicking() {
-    if(touchDownEvent == nullptr) {
-        return;
-    }
-    colorIdScreen->bind();
-    env.colorIdMode = true;
-    drawObjects();
-    env.colorIdMode = false;
-
-    auto colorId = colorIdScreen->getPixel(touchDownEvent->x, touchDownEvent->y);
-    //colorIdScreen->draw();
-    //__android_log_print(ANDROID_LOG_ERROR, "ColorId", "R: %f, G: %f, B: %f A: %f", colorId[0], colorId[1], colorId[2], colorId[3]);
-    std::unique_ptr<GameObject> pickedObject;
-    float epsilon = 0.02;
-    for (auto &obj : allData) {
-        auto match = MathUtils::areEqual(obj->colorId[0], colorId[0], epsilon)
-                && MathUtils::areEqual(obj->colorId[1],colorId[1], epsilon)
-                && MathUtils::areEqual(obj->colorId[2], colorId[2], epsilon);
-        if(match) {
-            obj->outline = !obj->outline;
-            __android_log_print(ANDROID_LOG_ERROR, "ColorId", "Picked object: %s", obj->name.c_str());
-        }
-    }
-    touchDownEvent.reset();
-    touchDownEvent = nullptr;
-}
-
 void GameRenderer::drawObjects() {
     clearBuffers();
     for (auto &obj : gameObjects) {
@@ -83,13 +55,4 @@ void GameRenderer::onDestroy() {
         }
     }
     screen->destroy();
-}
-
-void GameRenderer::onDrag(float x, float y) {
-    env.camera.rotate(-0.1f * x, glm::vec3(0.0f, 1.0f, 0.0f));
-    env.camera.zoom(0.01f * y);
-}
-
-void GameRenderer::onTouchDown(int x, int y) {
-    touchDownEvent = std::make_unique<TouchDown>( TouchDown { x, y });
 }

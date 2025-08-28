@@ -20,4 +20,13 @@ bool MathUtils::areEqual(float a, float b, float epsilon) {
     return std::fabs(a - b) < epsilon;
 }
 
+bool MathUtils::match(glm::vec4 &array1, glm::vec4 &array2, int length, float epsilon) {
+    for(int i = 0; i < length; i++) {
+        if(!areEqual(array1[i], array2[i], epsilon)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 

@@ -17,7 +17,7 @@ public:
     void bind() const;
     void draw() const;
     //void getPixel(int x, int y, unsigned byte * out) const;
-    glm::vec4 getPixel(int x, int y);
+    glm::vec4 getPixel(int x, int y) const;
     void destroy();
     ~Screen();
 

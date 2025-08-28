@@ -45,7 +45,7 @@ private:
 public:
 
     bool outline = false;
-    float colorId[3] = {randomFloat(), randomFloat(), randomFloat()}; // default white color id
+    glm::vec4 colorId = glm::vec4(randomFloat(), randomFloat(), randomFloat(), 1.0f); // default white color id
 
     Translation* getTranslation() {
         return &translation;
