@@ -11,6 +11,7 @@
 #include "objects/base/ShadersPaths.h"
 #include "objects/texture/Texture.h"
 #include "objects/GLObject.h"
+#include "objects/ui/LineObject.h"
 #include <glm/glm.hpp>
 #include <android/log.h>
 

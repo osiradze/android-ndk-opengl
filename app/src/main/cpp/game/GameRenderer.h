@@ -10,6 +10,7 @@
 #include "objects/primitives/Plane.h"
 #include "screen/Screen.h"
 #include "uievents/TouchDown.h"
+#include "objects/ui/LineObject.h"
 #include <array>
 
 class GameRenderer {
@@ -24,6 +25,10 @@ public:
     void onDrag(float x, float y);
 
     void onTouchDown(int x, int y);
+
+    void onTouch(int x, int y);
+
+    void onTouchUp(int x, int y);
 
     void onDestroy();
 
@@ -49,12 +54,17 @@ private:
             floor.get(), cube1.get(), cube2.get(), lightCube1.get(), lightCube2.get()
     };
 
-    std::unique_ptr<TouchDown> touchDownEvent;
+
+    std::unique_ptr<TouchDown> touchDownEvent = std::make_unique<TouchDown>( TouchDown { });
+
+    std::unique_ptr<LineObject> line = std::make_unique<LineObject>(touchDownEvent.get());
+
 
     void initObject();
     void updateObjects();
     void drawObjects();
     void handleColorIdPicking();
+    void setTouchCoordinates(int x, int y);
 
     static void initGLConfig();
     static void clearBuffers();

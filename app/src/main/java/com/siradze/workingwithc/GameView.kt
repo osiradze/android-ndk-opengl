@@ -43,6 +43,7 @@ class GameView(context: Context, attrs: AttributeSet) : GLSurfaceView(context) {
                     val deltaY = currentY - lastY
 
                     gameRenderer.onDragBridge(deltaX, deltaY)
+                    gameRenderer.onTouchBridge(event.x.toInt(), event.y.toInt())
 
                     lastX = currentX
                     lastY = currentY
@@ -50,7 +51,9 @@ class GameView(context: Context, attrs: AttributeSet) : GLSurfaceView(context) {
                 }
 
                 MotionEvent.ACTION_UP -> {
+                    gameRenderer.onTouchUpBridge(event.x.toInt(), event.y.toInt())
                     v.performClick() // good practice
+
                     true
                 }
 

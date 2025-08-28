@@ -41,3 +41,15 @@ Java_com_siradze_workingwithc_GameRenderer_onTouchDownBridge(JNIEnv *env, jobjec
                                                              jint y) {
     gameRenderer->onTouchDown(x, y);
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_siradze_workingwithc_GameRenderer_onTouchBridge(JNIEnv *env, jobject thiz, jint x,
+                                                         jint y) {
+    gameRenderer->onTouch(x, y);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_siradze_workingwithc_GameRenderer_onTouchUpBridge(JNIEnv *env, jobject thiz, jint x,
+                                                           jint y) {
+    gameRenderer->onTouchUp(x, y);
+}

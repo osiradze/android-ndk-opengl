@@ -13,6 +13,7 @@
 
 class Screen {
 public:
+    int width; int height;
     Screen(int width, int height);
     void bind() const;
     void draw() const;
@@ -23,7 +24,6 @@ public:
 
 private:
     // framebuffer
-    int width; int height;
     unsigned int fbo = 0;
     unsigned int texture = 0;
     unsigned int rbo = 0;

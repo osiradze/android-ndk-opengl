@@ -6,7 +6,7 @@
 #include "OpenglUtils.h"
 #include "../../assets/AssetManager.h"
 #include "../../image/stb_image.h"
-#include <GLES3/gl3.h>
+#include <GLES3/gl31.h>
 #include <android/log.h>
 #include <string>
 
@@ -60,6 +60,31 @@ bool OpenglUtils::createProgram(unsigned int &program, const char *vertexPath, c
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
     return success;
+}
+
+bool OpenglUtils::createComputeProgram(unsigned int &program, const char *computePath) {
+    std::string computeShaderSource = AssetManager::getFileStringContent(computePath);
+    if(computeShaderSource.empty()) {
+        __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "Failed to load compute shader source from file: %s", computePath);
+        return false;
+    }
+    unsigned int computeShader;
+    if(!OpenglUtils::createShader(GL_COMPUTE_SHADER, computeShaderSource.c_str(), computeShader)) {
+        return false;
+    }
+    program = glCreateProgram();
+    glAttachShader(program, computeShader);
+    glLinkProgram(program);
+    int success;
+    char infoLog[512];
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(program, 512, nullptr, infoLog);
+        __android_log_print(ANDROID_LOG_ERROR, "OpenglUtils", "%s", infoLog);
+        return false;
+    }
+    glDeleteShader(computeShader);
+    return true;
 }
 
 void OpenglUtils::loadTexture(const char *assetPath) {

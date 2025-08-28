@@ -42,11 +42,17 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
 
         game/objects/GLObject.cpp
         game/utils/OpenGLUtils.cpp
+        game/utils/ShaderUtil.cpp
         game/utils/MathUtils.cpp
+
+
+
         game/camera/Camera.cpp
         game/light/Light.cpp
         game/light/Attenuation.cpp
         game/environment/Environment.cpp
+
+        game/objects/ui/LineObject.cpp
 )
 
 find_library(gles-lib GLESv3)

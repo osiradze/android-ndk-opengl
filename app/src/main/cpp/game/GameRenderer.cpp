@@ -20,6 +20,7 @@ void GameRenderer::onSurfaceCreated() {
             data->freeVertexDataFromMemory();
         }
     }
+    line->init();
 }
 
 void GameRenderer::onDrawFrame() {
@@ -27,9 +28,11 @@ void GameRenderer::onDrawFrame() {
 
     screen->bind();
     drawObjects();
+    line->onDraw();
     screen->draw();
 
     handleColorIdPicking();
+    touchDownEvent->reset();
 }
 
 void GameRenderer::drawObjects() {
@@ -54,5 +57,6 @@ void GameRenderer::onDestroy() {
             obj->destroy();
         }
     }
+    line->destroy();
     screen->destroy();
 }
