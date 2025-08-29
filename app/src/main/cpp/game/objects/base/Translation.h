@@ -25,6 +25,10 @@ public:
         updateModelMatrix();
     }
 
+    glm::vec3 getPosition() {
+        return this->position;
+    }
+
     void setScale(const glm::vec3 s) {
         this->scale = s;
         updateModelMatrix();

@@ -7,7 +7,10 @@
 #include "utils/MathUtils.h"
 
 void GameRenderer::handleColorIdPicking() {
-    if(touch == nullptr) {
+    if(!touch->active) {
+        for (auto &obj : allData) {
+            obj->outline = false;
+        }
         return;
     }
     colorIdScreen->bind();
@@ -16,25 +19,24 @@ void GameRenderer::handleColorIdPicking() {
     env.colorIdMode = false;
 
     auto colorId = colorIdScreen->getPixel(touch->x, touch->y);
+    // colorIdScreen->draw();
     float epsilon = 0.01;
     for (auto &obj : allData) {
         auto match = MathUtils::match(obj->colorId, colorId, 3, epsilon);
         if(match) {
-            //obj->outline = !obj->outline;
+            obj->outline = true;
             break;
         }
     }
 }
 
 void GameRenderer::onDrag(float x, float y) {
-    //env.camera.rotate(-0.1f * x, glm::vec3(0.0f, 1.0f, 0.0f));
-    //env.camera.zoom(0.01f * y);
+    //return;
+    env.camera.rotate(-0.1f * x, glm::vec3(0.0f, 1.0f, 0.0f));
+    env.camera.zoom(0.01f * y);
 }
 
-void GameRenderer::onTouchDown(int x, int y) {
-    //touchDownEvent->start = true;
-    //setTouchCoordinates(x, y);
-}
+void GameRenderer::onTouchDown(int x, int y) {}
 
 void GameRenderer::onTouch(int x, int y) {
     if(touchTmp != nullptr) {
@@ -52,7 +54,6 @@ void GameRenderer::onTouchUp(int x, int y) {
     touchTmp = std::make_unique<TouchDownTmp>( TouchDownTmp {
         .touchUp = true,
     });
-    //setTouchCoordinates(x, y);
 }
 
 

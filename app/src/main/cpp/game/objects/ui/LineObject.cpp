@@ -48,7 +48,7 @@ void LineObject::onDraw() {
     );
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
-    glLineWidth(30.0f);
+    //glLineWidth(30.0f);
     glDrawArrays(GL_LINE_STRIP, 0, data->indicesCount);
     glBindVertexArray(0);
     glUseProgram(0);
