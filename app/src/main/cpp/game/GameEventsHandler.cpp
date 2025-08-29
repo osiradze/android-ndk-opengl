@@ -7,7 +7,7 @@
 #include "utils/MathUtils.h"
 
 void GameRenderer::handleColorIdPicking() {
-    if(touchDownEvent == nullptr) {
+    if(touch == nullptr) {
         return;
     }
     colorIdScreen->bind();
@@ -15,7 +15,7 @@ void GameRenderer::handleColorIdPicking() {
     drawObjects();
     env.colorIdMode = false;
 
-    auto colorId = colorIdScreen->getPixel(touchDownEvent->x, touchDownEvent->y);
+    auto colorId = colorIdScreen->getPixel(touch->x, touch->y);
     float epsilon = 0.01;
     for (auto &obj : allData) {
         auto match = MathUtils::match(obj->colorId, colorId, 3, epsilon);
@@ -32,28 +32,48 @@ void GameRenderer::onDrag(float x, float y) {
 }
 
 void GameRenderer::onTouchDown(int x, int y) {
-    touchDownEvent->start = true;
-    setTouchCoordinates(x, y);
+    //touchDownEvent->start = true;
+    //setTouchCoordinates(x, y);
 }
 
 void GameRenderer::onTouch(int x, int y) {
-    if(!touchDownEvent->active) {
-        touchDownEvent->start = true;
+    if(touchTmp != nullptr) {
+        return;
     }
-    touchDownEvent->active = true;
-    setTouchCoordinates(x, y);
+    touchTmp = std::make_unique<TouchDownTmp>( TouchDownTmp {
+        .x = x,
+        .y = y,
+        .floatX = (2.0f * x) / screen->width - 1.0f,
+        .floatY = 1.0f - (2.0f * y) / screen->height
+    });
 }
 
 void GameRenderer::onTouchUp(int x, int y) {
-    touchDownEvent->active = false;
-    setTouchCoordinates(x, y);
+    touchTmp = std::make_unique<TouchDownTmp>( TouchDownTmp {
+        .touchUp = true,
+    });
+    //setTouchCoordinates(x, y);
 }
 
 
-void GameRenderer::setTouchCoordinates(int x, int y) {
-    touchDownEvent->x = x;
-    touchDownEvent->y = y;
-    touchDownEvent->floatX = (2.0f * x) / screen->width - 1.0f;
-    touchDownEvent->floatY = 1.0f - (2.0f * y) / screen->height;
+void GameRenderer::copyTouchTmp() {
+    if(touchTmp == nullptr) {
+        return;
+    }
+    if(touchTmp->touchUp) {
+        touch->active = false;
+        touchTmp.reset();
+        return;
+    }
+    touch->x = touchTmp->x;
+    touch->y = touchTmp->y;
+    touch->floatX = touchTmp->floatX;
+    touch->floatY = touchTmp->floatY;
+    if(!touch->active) {
+        touch->start = true;
+    }
+    touch->active = true;
+
+    touchTmp.reset();
 }
 

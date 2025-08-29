@@ -25,14 +25,14 @@ void GameRenderer::onSurfaceCreated() {
 
 void GameRenderer::onDrawFrame() {
     updateObjects();
-
+    copyTouchTmp();
     screen->bind();
     drawObjects();
     line->onDraw();
     screen->draw();
 
     handleColorIdPicking();
-    touchDownEvent->reset();
+    touch->reset();
 }
 
 void GameRenderer::drawObjects() {

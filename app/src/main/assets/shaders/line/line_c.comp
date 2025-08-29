@@ -14,20 +14,16 @@ void main() {
     uint id = (gl_NumWorkGroups.x * gl_WorkGroupID.y + gl_WorkGroupID.x);
     uint index = id * 2u;
     if(u_mode == 1) {
-        inputOutput.data[index * 2u] = u_touch.x;
-        inputOutput.data[(index * 2u) + 1u] = u_touch.y;
+        inputOutput.data[index] = u_touch.x;
+        inputOutput.data[index + 1u] = u_touch.y;
     } else if(u_mode == 2) {
         if(id == u_vertex_number - 1u) {
             inputOutput.data[index] = u_touch.x;
             inputOutput.data[index + 1u] = u_touch.y;
-        }else {
+        } else {
             inputOutput.data[index] = inputOutput.data[index + 2u];
             inputOutput.data[index + 1u] = inputOutput.data[index + 3u];
         }
-
-    } else if(u_mode == 3) {
-        inputOutput.data[index] = 0.0;
-        inputOutput.data[index + 1u] = 0.0;
     }
 
 }

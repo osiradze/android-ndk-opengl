@@ -55,16 +55,17 @@ private:
     };
 
 
-    std::unique_ptr<TouchDown> touchDownEvent = std::make_unique<TouchDown>( TouchDown { });
+    std::unique_ptr<TouchDown> touch = std::make_unique<TouchDown>(TouchDown { });
+    std::unique_ptr<TouchDownTmp> touchTmp = nullptr;
 
-    std::unique_ptr<LineObject> line = std::make_unique<LineObject>(touchDownEvent.get());
+    std::unique_ptr<LineObject> line = std::make_unique<LineObject>(touch.get());
 
 
     void initObject();
     void updateObjects();
     void drawObjects();
     void handleColorIdPicking();
-    void setTouchCoordinates(int x, int y);
+    void copyTouchTmp();
 
     static void initGLConfig();
     static void clearBuffers();

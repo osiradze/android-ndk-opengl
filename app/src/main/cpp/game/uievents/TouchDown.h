@@ -16,3 +16,12 @@ struct TouchDown {
         start = false;
     }
 };
+
+struct TouchDownTmp {
+    bool touchUp = false;
+    int x = 0;
+    int y = 0;
+    float floatX = 0;
+    float floatY = 0;
+};
+

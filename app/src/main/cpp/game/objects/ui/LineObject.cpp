@@ -33,25 +33,22 @@ void LineObject::initData() {
 }
 
 void LineObject::onDraw() {
-
+    if(!touchPosition->active) return;
     ShaderUtil::computeShader(computeProgram,[&]{
             glUniform1ui(u_index, index);
             glUniform2f(u_touch, touchPosition->floatX, touchPosition->floatY);
             glUniform1ui(u_vertex_number, data->indicesCount);
-            if(touchPosition->active) {
-                glUniform1i(u_mode, 2);
-            } else {
-                glUniform1i(u_mode, 3);
-            }
+
+            glUniform1i(u_mode, 2);
             if(touchPosition->start) {
                 glUniform1i(u_mode, 1);
             }
-            //index++;
         },
         &vbo, 1,data->indicesCount,  1, 1
     );
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
+    glLineWidth(30.0f);
     glDrawArrays(GL_LINE_STRIP, 0, data->indicesCount);
     glBindVertexArray(0);
     glUseProgram(0);
