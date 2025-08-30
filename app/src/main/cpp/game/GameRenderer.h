@@ -2,15 +2,16 @@
 // Created by OSiradze on 13.07.25.
 //
 
-#include "objects/base/GameObject.h"
+#include "objects/GameObject.h"
 #include "camera/Camera.h"
 #include "light/Light.h"
 #include "environment/Environment.h"
-#include "objects/primitives//Cube.h"
-#include "objects/primitives/Plane.h"
+#include "objects/3d/primitives/Cube.h"
+#include "objects/3d/primitives/Plane.h"
 #include "screen/Screen.h"
 #include "uievents/TouchDown.h"
-#include "objects/ui/LineObject.h"
+#include "objects/2d/ui/LineObject.h"
+#include "objects/2d/particles/Particles.h"
 #include <array>
 
 class GameRenderer {
@@ -46,6 +47,8 @@ private:
     std::unique_ptr<GLObjectData> lightCube2 = Cube().getData();
 
     std::unique_ptr<GLObjectData> lantern;
+
+    std::unique_ptr<Particles> particles = std::make_unique<Particles>(&env, cube1.get());
 
     Environment env = Environment();
     std::vector<std::unique_ptr<GameObject>> gameObjects;

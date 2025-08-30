@@ -3,7 +3,7 @@
 //
 
 #pragma once
-#include "../game/objects/base/GameObjectData.h"
+#include "../game/objects/3d/data/GLObjectData.h"
 
 class ObjectLoader {
 public:

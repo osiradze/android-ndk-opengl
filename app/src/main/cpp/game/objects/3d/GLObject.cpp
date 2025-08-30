@@ -2,20 +2,20 @@
 // Created by OSiradze on 13.07.25.
 //
 
-#include <GLES3/gl3.h>
-#include "base/GameObject.h"
-#include "base/GameObjectData.h"
-#include "../utils/OpenglUtils.h"
-#include "../camera/Camera.h"
-#include "../light/Light.h"
-#include "../environment/Environment.h"
+#include <GLES3/gl31.h>
+#include "../GameObject.h"
+#include "data/GLObjectData.h"
+#include "../../utils/OpenglUtils.h"
+#include "../../camera/Camera.h"
+#include "../../light/Light.h"
+#include "../../environment/Environment.h"
 #include <array>
 #include <utility>
 #include <android/log.h>
 
 #include "glm/mat4x4.hpp" // glm::mat4
 #include "glm/ext/matrix_transform.hpp"
-#include "base/ShadersPaths.h"
+#include "../shaders/ShadersPaths.h"
 #include "texture/Texture.h"
 #include "GLObject.h"
 

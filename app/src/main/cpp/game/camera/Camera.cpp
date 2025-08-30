@@ -5,7 +5,7 @@
 #include "../utils/MathUtils.h"
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
-#include <GLES3/gl3.h>
+#include <GLES3/gl31.h>
 
 Camera::Camera(glm::vec3 eye, glm::vec3 center, glm::vec3 up, float fov, float ratio, float nearPlane, float farPlane)
         : eye(eye),

@@ -2,7 +2,7 @@
 // Created by OSiradze on 22.08.25.
 //
 #include "Screen.h"
-#include <GLES3/gl3.h>
+#include <GLES3/gl31.h>
 #include <android/log.h>
 
 

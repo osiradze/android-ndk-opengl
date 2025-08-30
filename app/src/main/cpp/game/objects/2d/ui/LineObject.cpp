@@ -3,8 +3,8 @@
 //
 #include <GLES3/gl31.h>
 #include "LineObject.h"
-#include "../../utils/OpenglUtils.h"
-#include "../../utils/ShaderUtil.h"
+#include "../../../utils/OpenglUtils.h"
+#include "../../../utils/ShaderUtil.h"
 
 void LineObject::init() {
     if (!data || !data->vertexData) return;
@@ -12,7 +12,6 @@ void LineObject::init() {
     // init programs
     if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(), shaders.fragmentShader.c_str())) { return; }
     if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
-    u_index = glGetUniformLocation(computeProgram, "u_index");
     u_touch = glGetUniformLocation(computeProgram, "u_touch");
     u_mode = glGetUniformLocation(computeProgram, "u_mode");
     u_vertex_number = glGetUniformLocation(computeProgram, "u_vertex_number");
@@ -26,7 +25,7 @@ void LineObject::initData() {
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, data->vertexDataSize, data->vertexData.get(), GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(0, data->floatPerVertex, GL_FLOAT, GL_FALSE, data->stride, (void*)0);
+    glVertexAttribPointer(0, data->floatPerVertex, GL_FLOAT, GL_FALSE, data->stride, nullptr);
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -35,7 +34,6 @@ void LineObject::initData() {
 void LineObject::onDraw() {
     if(!touchPosition->active) return;
     ShaderUtil::computeShader(computeProgram,[&]{
-            glUniform1ui(u_index, index);
             glUniform2f(u_touch, touchPosition->floatX, touchPosition->floatY);
             glUniform1ui(u_vertex_number, data->indicesCount);
 

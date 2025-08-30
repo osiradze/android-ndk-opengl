@@ -3,8 +3,6 @@
 //
 #pragma once
 
-#include "../base/GameObjectData.h"
-
 class Plane {
 private:
     int floatsPerVertex = 11;

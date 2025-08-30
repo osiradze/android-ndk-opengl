@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "base/GameObject.h"
-#include "base/GameObjectData.h"
-#include "../environment/Environment.h"
-#include "base/ShadersPaths.h"
+#include "../GameObject.h"
+#include "data/GLObjectData.h"
+#include "../../environment/Environment.h"
+#include "../shaders/ShadersPaths.h"
 #include "texture/Texture.h"
-#include "shaders/Program.h"
+#include "../shaders/Program.h"
 
 
 class GLObject : public GameObject {

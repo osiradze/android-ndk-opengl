@@ -40,7 +40,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/screen/Screen.cpp
         game/screen/ScreenRect.cpp
 
-        game/objects/GLObject.cpp
+        game/objects/3d/GLObject.cpp
         game/utils/OpenGLUtils.cpp
         game/utils/ShaderUtil.cpp
         game/utils/MathUtils.cpp
@@ -52,7 +52,10 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/light/Attenuation.cpp
         game/environment/Environment.cpp
 
-        game/objects/ui/LineObject.cpp
+        game/objects/2d/ui/LineObject.cpp
+        game/objects/2d/particles/Particles.cpp
+        game/objects/2d/particles/ParticlesData.cpp
+
 )
 
 find_library(gles-lib GLESv3)

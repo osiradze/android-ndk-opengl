@@ -5,13 +5,13 @@
 
 #include "GameRenderer.h"
 #include "light/Light.h"
-#include "objects/primitives/Cube.h"
+#include "objects/3d/primitives/Cube.h"
 #include "utils/MathUtils.h"
 #include "../object_loader/ObjectLoader.h"
-#include "objects/base/ShadersPaths.h"
-#include "objects/texture/Texture.h"
-#include "objects/GLObject.h"
-#include "objects/ui/LineObject.h"
+#include "objects/shaders/ShadersPaths.h"
+#include "objects/3d/texture/Texture.h"
+#include "objects/3d/GLObject.h"
+#include "objects/2d/ui/LineObject.h"
 #include <glm/glm.hpp>
 #include <android/log.h>
 
@@ -39,10 +39,13 @@ void GameRenderer::initObject(){
 
 
     lightCube1->getTranslation()->setPosition(env.lights[0].light_position);
+    lightCube1->name = "light1";
+
     lightCube1->getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
     gameObjects.push_back(std::make_unique<GLObject>(&env, lightCube1.get(), lightShaders, std::nullopt));
 
     lightCube2->getTranslation()->setPosition(env.lights[1].light_position);
+    lightCube2->name = "light2";
     lightCube2->getTranslation()->setScale(glm::vec3(0.2f, 0.2f, 0.2f));
     gameObjects.push_back(std::make_unique<GLObject>(&env, lightCube2.get(), lightShaders, std::nullopt));
 

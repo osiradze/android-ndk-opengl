@@ -2,7 +2,7 @@
 // Created by OSiradze on 06.08.25.
 //
 
-#include <GLES3/gl3.h>
+#include <GLES3/gl31.h>
 #include "GameRenderer.h"
 
 void GameRenderer::initGLConfig() {

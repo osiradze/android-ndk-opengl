@@ -4,14 +4,16 @@
 
 #pragma once
 #include <array>
-#include <glm/gtc/matrix_transform.hpp>
+#include "glm/gtc/matrix_transform.hpp"
 #include "glm/glm.hpp"
-#include "Translation.h"
+#include "../../base/Translation.h"
+#include "../../../utils/MathUtils.h"
 #include <random>
 #include <utility>
 
 struct GLObjectData {
 
+    unsigned int numberOfFloatsPerVertex;
     unsigned int stride;
     unsigned int vertexDataSize;
     unsigned int indicesSize;
@@ -28,6 +30,7 @@ struct GLObjectData {
             int indicesCount = 0,
             std::unique_ptr<unsigned int[]> indices = nullptr
     ):
+    numberOfFloatsPerVertex(numberOfFloatsPerVertex),
     stride(numberOfFloatsPerVertex * sizeof(float)),
     vertexDataSize(vertexDataCount * sizeof(float)),
     indicesSize(indicesCount * sizeof(unsigned int)),
@@ -38,14 +41,10 @@ struct GLObjectData {
 private:
     Translation translation = Translation();
 
-    static float randomFloat() {
-        return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
-    }
-
 public:
 
     bool outline = false;
-    glm::vec4 colorId = glm::vec4(randomFloat(), randomFloat(), randomFloat(), 1.0f); // default white color id
+    glm::vec4 colorId = glm::vec4(MathUtils::randomFloat(), MathUtils::randomFloat(), MathUtils::randomFloat(), 1.0f); // default white color id
 
     Translation* getTranslation() {
         return &translation;

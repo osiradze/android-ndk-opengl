@@ -1,7 +1,7 @@
 //
 // Created by OSiradze on 27.07.25.
 //
-#include <GLES3/gl3.h>
+#include <GLES3/gl31.h>
 #include "Light.h"
 #include "../utils/MathUtils.h"
 #include <glm/ext/matrix_transform.hpp>

@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include "../base/GameObjectData.h"
+
+#include "../data/GLObjectData.h"
 
 class Cube {
 private:

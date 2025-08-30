@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "../base/GameObject.h"
-#include "../base/ShadersPaths.h"
-#include "../../uievents/TouchDown.h"
 #include <array>
+#include "../../../uievents/TouchDown.h"
+#include "../../GameObject.h"
+#include "../../shaders/ShadersPaths.h"
 
 struct LineObjectData {
     unsigned int indicesCount = 100;
@@ -34,13 +34,9 @@ private:
     unsigned int shaderProgram = 0;
     unsigned int computeProgram = 0;
 
-    int u_index = 0;
     int u_touch = 0;
     int u_mode = 0; // 1 - start, 2 - active, 3 - end
     int u_vertex_number = 0;
-
-
-    unsigned int index = 0;
 
     TouchDown* touchPosition;
 

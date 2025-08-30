@@ -3,7 +3,7 @@
 //
 #include "Screen.h"
 #include "../utils/OpenglUtils.h"
-#include <GLES3/gl3.h>
+#include <GLES3/gl31.h>
 #include <android/log.h>
 
 

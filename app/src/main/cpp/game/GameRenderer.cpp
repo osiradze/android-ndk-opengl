@@ -1,8 +1,8 @@
 //
 // Created by OSiradze on 13.07.25.
 //
-#include "GameRenderer.h"
 #include "light/Light.h"
+#include "GameRenderer.h"
 #include <glm/glm.hpp>
 #include <android/log.h>
 
@@ -15,12 +15,8 @@ void GameRenderer::onSurfaceCreated() {
             obj->init();
         }
     }
-    for(auto &data : allData) {
-        if (data) {
-            data->freeVertexDataFromMemory();
-        }
-    }
     line->init();
+    particles->init();
 }
 
 void GameRenderer::onDrawFrame() {
@@ -28,7 +24,6 @@ void GameRenderer::onDrawFrame() {
     copyTouchTmp();
     screen->bind();
     drawObjects();
-    line->onDraw();
     screen->draw();
 
     handleColorIdPicking();
@@ -42,6 +37,8 @@ void GameRenderer::drawObjects() {
             obj->onDraw();
         }
     }
+    line->onDraw();
+    particles->onDraw();
 }
 
 
@@ -59,4 +56,11 @@ void GameRenderer::onDestroy() {
     }
     line->destroy();
     screen->destroy();
+    particles->destroy();
+
+    for(auto &data : allData) {
+        if (data) {
+            data->freeVertexDataFromMemory();
+        }
+    }
 }
