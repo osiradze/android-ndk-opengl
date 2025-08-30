@@ -11,7 +11,7 @@ void Particles::init() {
 
     // init programs
     if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(), shaders.fragmentShader.c_str())) { return; }
-    //if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
+    if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
     uniforms.init(shaderProgram);
     initData();
 }

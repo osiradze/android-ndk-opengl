@@ -100,7 +100,7 @@ void GLObject::initTexture() {
         return;
     }
     glGenTextures(numberOfTextures, texture);
-    glActiveTexture(GL_TEXTURE);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture[0]);
     OpenglUtils::loadTexture(texturePath->diffuse.c_str());
     textureLocations[0] = glGetUniformLocation(shaderProgram.id, "u_texture");
