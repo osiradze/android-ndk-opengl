@@ -11,7 +11,7 @@ void Particles::init() {
 
     // init programs
     if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(), shaders.fragmentShader.c_str())) { return; }
-    if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
+    OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str());
     uniforms.init(shaderProgram);
     initData();
 }
@@ -23,16 +23,17 @@ void Particles::initData() {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, data->dataSize, data->data.get(), GL_DYNAMIC_DRAW);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, data->stride, nullptr);
+    glVertexAttribPointer(1, 1, GL_FLOAT, GL_FALSE, data->stride, (void*)(6 * sizeof(float)));
     glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
 
 void Particles::onDraw() {
-   /* ShaderUtil::computeShader(computeProgram,[&]{
-
+    ShaderUtil::computeShader(computeProgram,[&]{
         },&vbo, 1,data->indicesCount,  1, 1
-    );*/
+    );
     glUseProgram(shaderProgram);
     updateUniforms();
     glBindVertexArray(vao);

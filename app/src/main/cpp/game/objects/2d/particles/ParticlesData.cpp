@@ -5,18 +5,27 @@
 
 ParticlesData::ParticlesData(GLObjectData* objectDataPtr) {
     if (!data) return;
-    for (unsigned int i = 0; i < objectDataPtr->indicesCount; i++) {
-        // position
-        auto vertexPosition = i * objectDataPtr->numberOfFloatsPerVertex;
-        data[i * floatPerVertex + 0] = objectDataPtr->vertexData[vertexPosition]; // x
-        data[i * floatPerVertex + 1] = objectDataPtr->vertexData[vertexPosition + 1]; // y
-        data[i * floatPerVertex + 2] = objectDataPtr->vertexData[vertexPosition + 2]; // z
-        // velocity
-        data[i * floatPerVertex + 3] = 0.0f; // vx
-        data[i * floatPerVertex + 4] = 0.0f; // vy
-        data[i * floatPerVertex + 5] = 0.0f; // vz
-        // size
-        data[i * floatPerVertex + 6] =  0.0f; // size
+    int repeatCount = indicesCount / objectDataPtr->indicesCount;
+    repeatCount--;
+    //repeatCount = 1;
+    for(int r = 0; r < repeatCount; r++) {
+        float step = 1.0f - (1.0f / repeatCount) * r;
+         // offset to center particles
+        unsigned int chunkIndex = r * objectDataPtr->indicesCount * floatPerVertex;
+        for (int i = 0; i < objectDataPtr->indicesCount; i++) {
+            // position
+            auto vertexPosition = i * objectDataPtr->numberOfFloatsPerVertex;
+
+            data[chunkIndex + i * floatPerVertex + 0] = objectDataPtr->vertexData[vertexPosition + 0] * step + MathUtils::randomFloat() / 2.0; // x
+            data[chunkIndex + i * floatPerVertex + 1] = objectDataPtr->vertexData[vertexPosition + 1] * step + MathUtils::randomFloat() / 2.0; // y
+            data[chunkIndex + i * floatPerVertex + 2] = objectDataPtr->vertexData[vertexPosition + 2] * step + MathUtils::randomFloat() / 2.0; // z
+            // velocity
+            data[chunkIndex + i * floatPerVertex + 3] = MathUtils::randomFloat() * 2.0f - 1.0f; // vx
+            data[chunkIndex + i * floatPerVertex + 4] = MathUtils::randomFloat(); // vy
+            data[chunkIndex + i * floatPerVertex + 5] = MathUtils::randomFloat() * 2.0f - 1.0f; // vz
+            // size
+            data[chunkIndex + i * floatPerVertex + 6] = MathUtils::randomFloat() * 2.0f + 2.0f; // size*/
+        }
     }
 }
 

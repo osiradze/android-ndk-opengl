@@ -21,8 +21,10 @@ void main() {
             inputOutput.data[index] = u_touch.x;
             inputOutput.data[index + 1u] = u_touch.y;
         } else {
-            inputOutput.data[index] = inputOutput.data[index + 2u];
-            inputOutput.data[index + 1u] = inputOutput.data[index + 3u];
+            inputOutput.data[index] += inputOutput.data[index + 2u];
+            inputOutput.data[index] /= 2.0;
+            inputOutput.data[index + 1u] += inputOutput.data[index + 3u];
+            inputOutput.data[index + 1u] /= 2.0;
         }
     }
 

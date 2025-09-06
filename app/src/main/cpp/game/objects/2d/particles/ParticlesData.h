@@ -11,7 +11,7 @@ class ParticlesData {
 public:
     explicit ParticlesData(GLObjectData* objectDataPtr);
 
-    unsigned int indicesCount = 100;
+    unsigned int indicesCount = 2000;
     unsigned int floatPerVertex = 7; // x, y, z, vx, vy, vz, size
     unsigned int stride = floatPerVertex * sizeof(float);
     unsigned int dataSize = indicesCount * floatPerVertex * sizeof(float);
