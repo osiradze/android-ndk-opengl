@@ -5,6 +5,13 @@ layout (std430, binding = 0) buffer InputOutputBuffer {
     float data[];
 } inputOutput;
 
+uniform mat4 u_model;
+uniform mat4 u_view;
+uniform mat4 u_projection;
+uniform vec3 u_right_vector;
+
+uniform uint u_touch_is_active;
+uniform vec2 u_touch_position;
 
 void main() {
     uint id = (gl_NumWorkGroups.x * gl_WorkGroupID.y + gl_WorkGroupID.x);
@@ -12,4 +19,14 @@ void main() {
     inputOutput.data[index + 0u] += inputOutput.data[index + 3u] / 50.0;
     inputOutput.data[index + 1u] += inputOutput.data[index + 4u] / 50.0;
     inputOutput.data[index + 2u] += inputOutput.data[index + 5u] / 50.0;
+
+    if (u_touch_is_active == 1u) {
+        vec3 pos = vec3(inputOutput.data[index + 0u], inputOutput.data[index + 1u], inputOutput.data[index + 2u]);
+        vec4 screenPos = u_projection * u_view * u_model * vec4(pos, 1.0);
+        float distance = length(u_touch_position - screenPos.xy);
+
+        inputOutput.data[index + 3u] = 1.0 / (distance * distance);
+        inputOutput.data[index + 4u] = 1.0 / (distance * distance);
+        inputOutput.data[index + 5u] = 1.0 / (distance * distance);
+    }
 }

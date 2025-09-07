@@ -141,7 +141,7 @@ void GLObject::updateUniforms(Program &program) {
     }
 
     // for color id
-    glUniform3f(program.uniforms.u_color_id, data->colorId[0], data->colorId[1], data->colorId[2]);
+    glUniform3f(program.uniforms.ui.u_color_id, data->colorId[0], data->colorId[1], data->colorId[2]);
 
 }
 

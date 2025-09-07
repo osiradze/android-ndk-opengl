@@ -29,8 +29,8 @@ bool MathUtils::match(glm::vec4 &array1, glm::vec4 &array2, int length, float ep
     return true;
 }
 
-float MathUtils::randomFloat() {
-    return static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+float MathUtils::randomFloat(float min, float max) {
+    float t = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+    return min + t * (max - min);
 }
-
 

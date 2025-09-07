@@ -48,7 +48,6 @@ private:
 
     std::unique_ptr<GLObjectData> lantern;
 
-    std::unique_ptr<Particles> particles = std::make_unique<Particles>(&env, cube1.get());
 
     Environment env = Environment();
     std::vector<std::unique_ptr<GameObject>> gameObjects;
@@ -62,6 +61,8 @@ private:
     std::unique_ptr<TouchDownTmp> touchTmp = nullptr;
 
     std::unique_ptr<LineObject> line = std::make_unique<LineObject>(touch.get());
+    std::unique_ptr<Particles> particles = std::make_unique<Particles>(&env, cube1.get(), touch.get());
+
 
 
     void initObject();

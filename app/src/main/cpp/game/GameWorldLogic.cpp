@@ -31,7 +31,7 @@ void GameRenderer::initObject(){
 
     cube1->getTranslation()->setPosition(glm::vec3(-1.0f, 0.0f, 0.0f));
     cube1->getTranslation()->setRotation(glm::vec3(0.0f, 0.0f, 0.0f));
-    gameObjects.push_back(std::make_unique<GLObject>(&env, cube1.get(), objectShader, cubeTexture));
+    //gameObjects.push_back(std::make_unique<GLObject>(&env, cube1.get(), objectShader, cubeTexture));
 
     cube2->getTranslation()->setPosition(glm::vec3(1.0f, 0.0f, 0.0f));
     cube2->getTranslation()->setRotation(glm::vec3(0.0f, 45.0f, 0.0f));

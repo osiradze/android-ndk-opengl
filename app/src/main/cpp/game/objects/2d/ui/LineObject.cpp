@@ -16,6 +16,7 @@ void LineObject::init() {
     u_mode = glGetUniformLocation(computeProgram, "u_mode");
     u_vertex_number = glGetUniformLocation(computeProgram, "u_vertex_number");
 
+    initLineWidth();
     initData();
 }
 
@@ -46,7 +47,7 @@ void LineObject::onDraw() {
     );
     glUseProgram(shaderProgram);
     glBindVertexArray(vao);
-    glLineWidth(30.0f);
+    glLineWidth(lineWidth);
     glDrawArrays(GL_LINE_STRIP, 0, data->indicesCount);
     glBindVertexArray(0);
     glUseProgram(0);
@@ -59,4 +60,10 @@ void LineObject::destroy() {
     glDeleteBuffers(1, &vbo);
     glDeleteProgram(shaderProgram);
     glDeleteProgram(computeProgram);
+}
+
+void LineObject::initLineWidth() {
+    GLint vp[4];
+    glGetIntegerv(GL_VIEWPORT, vp); // {x, y, width, height}
+    lineWidth = vp[2] / 200.0f;
 }

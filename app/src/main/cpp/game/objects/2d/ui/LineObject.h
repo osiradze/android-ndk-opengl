@@ -46,6 +46,9 @@ private:
             .computeShader = "shaders/line/line_c.comp"
     };
 
+    float lineWidth = 30.0f;
+
     void initData();
+    void initLineWidth();
 
 };

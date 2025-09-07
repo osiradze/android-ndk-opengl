@@ -16,13 +16,14 @@ ParticlesData::ParticlesData(GLObjectData* objectDataPtr) {
             // position
             auto vertexPosition = i * objectDataPtr->numberOfFloatsPerVertex;
 
-            data[chunkIndex + i * floatPerVertex + 0] = objectDataPtr->vertexData[vertexPosition + 0] * step + MathUtils::randomFloat() / 2.0; // x
-            data[chunkIndex + i * floatPerVertex + 1] = objectDataPtr->vertexData[vertexPosition + 1] * step + MathUtils::randomFloat() / 2.0; // y
-            data[chunkIndex + i * floatPerVertex + 2] = objectDataPtr->vertexData[vertexPosition + 2] * step + MathUtils::randomFloat() / 2.0; // z
+            float scatter = 0.5f;
+            data[chunkIndex + i * floatPerVertex + 0] = objectDataPtr->vertexData[vertexPosition + 0] * step + MathUtils::randomFloat(-scatter, scatter) * (1.0 - step); // x
+            data[chunkIndex + i * floatPerVertex + 1] = objectDataPtr->vertexData[vertexPosition + 1] * step + MathUtils::randomFloat(-scatter, scatter) * (1.0 - step); // x
+            data[chunkIndex + i * floatPerVertex + 2] = objectDataPtr->vertexData[vertexPosition + 2] * step + MathUtils::randomFloat(-scatter, scatter) * (1.0 - step); // x
             // velocity
-            data[chunkIndex + i * floatPerVertex + 3] = MathUtils::randomFloat() * 2.0f - 1.0f; // vx
+         /*   data[chunkIndex + i * floatPerVertex + 3] = MathUtils::randomFloat() * 2.0f - 1.0f; // vx
             data[chunkIndex + i * floatPerVertex + 4] = MathUtils::randomFloat(); // vy
-            data[chunkIndex + i * floatPerVertex + 5] = MathUtils::randomFloat() * 2.0f - 1.0f; // vz
+            data[chunkIndex + i * floatPerVertex + 5] = MathUtils::randomFloat() * 2.0f - 1.0f; // vz*/
             // size
             data[chunkIndex + i * floatPerVertex + 6] = MathUtils::randomFloat() * 2.0f + 2.0f; // size*/
         }

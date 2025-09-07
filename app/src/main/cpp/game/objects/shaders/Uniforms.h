@@ -45,11 +45,24 @@ public:
     }
 };
 
+struct UIUniforms {
+    int u_color_id = -1;
+    int u_touch_position = -1;
+    int u_touch_is_active = -1;
+public:
+    void init(unsigned int program) {
+        u_color_id = glGetUniformLocation(program, "u_color_id");
+        u_touch_position = glGetUniformLocation(program, "u_touch_position");
+        u_touch_is_active = glGetUniformLocation(program, "u_touch_is_active");
+    }
+};
+
 struct CommonUniforms {
     CameraUniforms camera;
     std::vector<LightUniforms> light;
     int number_of_lights = -1;
-    int u_color_id = -1;
+    UIUniforms ui;
+
 public:
     void init(unsigned int program, int lightCount = 0) {
         light = std::vector<LightUniforms>(lightCount);
@@ -57,7 +70,7 @@ public:
             light[i].init(program, i);
         }
         number_of_lights = glGetUniformLocation(program, "u_number_of_lights");
-        u_color_id = glGetUniformLocation(program, "u_color_id");
+        ui.init(program);
         camera.init(program);
     }
 };
